@@ -1,0 +1,18 @@
+{
+  "name": "valkri_mk_2",
+  "version": "1.0.0",
+  "description": "Brawlhalla Wiki bot",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DiriectorDoc/VALKRI_Mk_2"
+  },
+  "author": "Diriector_Doc",
+  "license": "MIT",
+  "dependencies": {
+    "mwn": "^2.0.2"
+  }
+}
