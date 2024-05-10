@@ -13,6 +13,7 @@
   "author": "Diriector_Doc",
   "license": "MIT",
   "dependencies": {
-    "mwn": "^2.0.2"
+    "mwn": "^2.0.2",
+    "readline": "^1.3.0"
   }
 }
