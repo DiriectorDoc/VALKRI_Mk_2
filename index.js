@@ -197,8 +197,11 @@ void async function(){
 			if(/Patch\d+/.test(page)){
 				cats.add(flag = "[[Category:Patch images]]")
 			}
-			if(page.includes("Chest.png") || page.includes("Chest Tile.jpg")){
+			if(page.includes("Chest.png")){
 				cats.add(flag = "[[Category:Chest images]]")
+			}
+			if(page.includes("Chest Tile.jpg")){
+				cats.add(flag = "[[Category:Chest tiles]]")
 			}
 			if(/File:Podium.+.png/.test(page)){
 				cats.add(flag = "[[Category:Podium images]]")
@@ -237,7 +240,7 @@ void async function(){
 				cats.add("[[Category:Taunt sound effects]]")
 			}
 			return cats.size == 0 ? Promise.resolve("Skipped") : Promise.race([bot.edit(page, (rev) => {
-				let currentCats = [...rev.content.matchAll(/\[\[\s*category\s*:[^\]]+\]\]/ig)].map(e => e?.[0]),
+				let currentCats = [...rev.content.matchAll(/\[\[\s*category\s*:[^\]]+\]\]/ig)].map(e => e?.[0].replaceAll("_", " ")),
 					content = rev.content,
 					message = "Added";
 				switch(flag){
@@ -273,9 +276,10 @@ void async function(){
 					case "[[Category:Taunt images]]":
 					case "[[Category:Podium sounds]]":
 					case "[[Category:Chest images]]":
+					case "[[Category:Chest tiles]]":
 					case "[[Category:Signature images]]":
 					case "[[Category:Stats images]]":
-						for(let r of ["Skin icons", "Stats", "ranked avatars", "avatars", "Animated Avatars", "Realm images", "UI images", "Taunt images", "Podium images", "Chest images", "Patch images", "Color scheme palettes", "DLC images", "Music", "Sidekick icons", "Sidekick images", "Logo images", "Concept art", "Gadget images", "Emoji images", "Animated KO images", "Podium sounds", "Signature images", "icon images"]){
+						for(let r of ["Skin icons", "Stats", "ranked avatars", "avatars", "Animated Avatars", "Realm images", "UI images", "Taunt images", "Podium images", "Chest images", "Patch images", "Color scheme palettes", "DLC images", "Music", "Sidekick icons", "Sidekick images", "Logo images", "Concept art", "Gadget images", "Emoji images", "Animated KO images", "Podium sounds", "Signature images", "icon images", "chest tiles"]){
 							let found = currentCats.find(e => new RegExp(`\\[\\[\\s*category\\s*:\\s*${r}\\s*\\]\\]`, "i").test(e));
 							if(found){
 								content = content.replace(found, "");
@@ -290,7 +294,7 @@ void async function(){
 					default:
 						for(let c of currentCats){
 							let exec = /\[\[\s*category\s*:\s*(.+)\s*\]\]/i.exec(c);
-							cats.add(`[[Category:${exec[1][0].toUpperCase()}${exec[1].substring(1).replaceAll("_", " ")}]]`)
+							cats.add(`[[Category:${exec[1][0].toUpperCase()}${exec[1].substring(1)}]]`)
 							content = content.replace(exec[0], "")
 						}
 						content = content === "" ? sortAndJoin(cats) : `${content.trim()}\n${sortAndJoin(cats)}`
