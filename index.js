@@ -5,7 +5,7 @@ const fs = require("node:fs");
 const readline = require("readline");
 let { colours, skins, uiImages, weapons, legends } = require("./patterns.json");
 
-skins = skins.map(e => new RegExp(`${e}\\.(png|gif)`, "i"));
+skins = skins.map(e => new RegExp(`File:${e}\\.(png|gif)`, "i"));
 
 readline.emitKeypressEvents(process.stdin);
 
@@ -152,7 +152,7 @@ void async function(){
 			if(page.includes("File:Button ")){
 				cats.add("[[Category:Controls images]]")
 			}
-			if(page.includes("Brawlhalla Logo") || page.includes("File:Logo")){
+			if(page.includes("Brawlhalla Logo") || page.includes("File:Logo") || page.includes("Logo.png")){
 				cats.add(flag = "[[Category:Logo images]]")
 			}
 			if(page.includes("File:Color ")){
@@ -241,13 +241,13 @@ void async function(){
 			}
 			return cats.size == 0 ? Promise.resolve("Skipped") : Promise.race([bot.edit(page, (rev) => {
 				let currentCats = [...rev.content.matchAll(/\[\[\s*category\s*:[^\]]+\]\]/ig)].map(e => e?.[0].replaceAll("_", " ")),
-					content = rev.content,
+					content = rev.content.replaceAll("_", " "),
 					message = "Added";
 				switch(flag){
 					case "{{delete|Duplicate file}}":
 						return {
 							// return parameters needed for [[mw:API:Edit]]
-							text: content + `${content.trim()}\n${sortAndJoin(cats)}`,
+							text: content === "" ? sortAndJoin(cats) : `${content.trim()}\n${sortAndJoin(cats)}`,
 							summary: "Tagging for deletion",
 							minor: true
 						}
