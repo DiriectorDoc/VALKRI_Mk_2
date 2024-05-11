@@ -308,7 +308,7 @@ void async function(){
 					case "[[Category:Music]]":
 					case "[[Category:Ranked banner images]]":
 					case "[[Category:Portrait images]]":
-						for(let r of ["Skin icons", "Stats", "ranked avatars", "avatars", "Animated Avatars", "realm images", "UI images", "Taunt images", "Podium images", "Chest images", "Patch images", "Color scheme palettes", "DLC images", "Music", "Sidekick icons", "Sidekick images", "Logo images", "Concept art", "Gadget images", "Emoji images", "Animated KO images", "Podium sounds", "Signature images", "icon images", "chest tiles", "ranked banners", "Portrait images", "Official artwork"]){
+						for(let r of ["Skin icons", "Stats", "ranked avatars", "avatars", "animated Avatars", "realm images", "UI images", "Taunt images", "Podium images", "Chest images", "Patch images", "Color scheme palettes", "DLC images", "Music", "Sidekick icons", "Sidekick images", "Logo images", "Concept art", "Gadget images", "Emoji images", "Animated KO images", "Podium sounds", "Signature images", "icon images", "chest tiles", "ranked banners", "Portrait images", "Official artwork"]){
 							let found = currentCats.find(e => new RegExp(`\\[\\[\\s*category\\s*:\\s*${r}\\s*\\]\\]`, "i").test(e));
 							if(found){
 								content = content.replace(found, "");
