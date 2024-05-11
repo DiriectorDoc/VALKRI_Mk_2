@@ -5,7 +5,7 @@ const fs = require("node:fs");
 const readline = require("readline");
 let { colours, skins, uiImages, weapons, legends } = require("./patterns.json");
 
-skins = skins.map(e => new RegExp(`File:${e}\\.(png|gif)`, "i"));
+skins = skins.map(e => new RegExp(`File:(Ani)?${e}\\s?(Level \\d|\\(idle\\)|\\(lock-in\\))?\\.(png|gif)`, "i"));
 
 readline.emitKeypressEvents(process.stdin);
 
@@ -105,10 +105,6 @@ void async function(){
 				cats.add(flag = "[[Category:UI images]]")
 			}
 			avatar: if(page.includes("File:Avatar")){
-				if(page.includes("AniAvatar")){
-					cats.add(flag = "[[Category:Animated avatar images]]")
-					break avatar
-				}
 				if(page.includes("Avatar Flag")){
 					cats.add(flag = "[[Category:Flag avatar images]]")
 					break avatar
@@ -125,6 +121,18 @@ void async function(){
 				}
 				cats.add(flag = "[[Category:Avatar images]]")
 			}
+			ani: if(page.includes("File:Ani")){
+				if(page.includes("AniAvatar")){
+					cats.add(flag = "[[Category:Animated avatar images]]")
+				}
+				if(/\(\d*x?\d+px\)\.png/.test(page)){
+					cats.add("[[Category:Alternate resolution images]]")
+					break ani
+				}
+				if(/File:Ani.+\.png/.test(page)){
+					cats.add("[[Category:Animated PNGs]]")
+				}
+			}
 			if(page.includes("File:BGS ")){
 				cats.add("[[Category:Brawlhalla Grand Slam images]]")
 			}
@@ -140,7 +148,7 @@ void async function(){
 			if(/Border .+ Chest/.test(page)){
 				cats.add("[[Category:Chest border images]]")
 			}
-			if(page.includes("File:Bot ") && cats.size == 0){
+			if((page.includes("File:Bot ") && cats.size == 0) || page.includes("File:AniBot")){
 				cats.add(flag = "[[Category:Sidekick images]]")
 			}
 			if(page.includes("File:BotIcon")){
@@ -188,7 +196,7 @@ void async function(){
 			if(page.includes("File:Nav ")){
 				cats.add("[[Category:Navigation button images]]")
 			}
-			if(page.includes("Official artwork")){
+			if(page.includes("Official Artwork")){
 				cats.add(flag = "[[Category:Official artwork]]")
 			}
 			if(page.includes("File:Palette")){
@@ -210,7 +218,7 @@ void async function(){
 				cats.add(flag = "[[Category:Podium sounds]]")
 			}
 			if(page.includes("File:Portrait")){
-				cats.add("[[Category:Portrait images]]")
+				cats.add(flag = "[[Category:Portrait images]]")
 			}
 			if(page.includes("File:Profile")){
 				cats.add("[[Category:Profiles of people]]")
@@ -224,7 +232,7 @@ void async function(){
 			if(page.includes("SkinIcon")){
 				cats.add(flag = "[[Category:Skin icons]]")
 			}
-			if(/File:Stats\d\w*?\d\.png/.test(page)){
+			if(/File:Stats\d\w*1?\.png/.test(page)){
 				cats.add(flag = "[[Category:Stats images]]")
 			}
 			if(page.includes("StatIcon")){
@@ -238,6 +246,24 @@ void async function(){
 			}
 			if(/File:Taunt.+\.mp3/.test(page)){
 				cats.add("[[Category:Taunt sound effects]]")
+			}
+			if(page.includes("Theme.mp3") || /Level.+\.mp3/i.test(page)){
+				cats.add(flag = "[[Category:Music]]")
+			}
+			if(page.includes("Banner Rank")){
+				cats.add(flag = "[[Category:Ranked banner images]]")
+			}
+			// if(page.includes("100M")){
+			// 	cats.add(flag = "[[Category:100 Million Brawlers images]]")
+			// }
+			if(page.includes("Cassidy's Cupcake") || page.includes("File:CC ")){
+				cats.add("[[Category:Cassidy's Cupcakes images]]")
+			}
+			if(/\bpromo\b/i.test(page)){
+				cats.add("[[Category:Promo images]]")
+			}
+			if(/icon\.png/i.test(page) || page.includes("EventIcon") || page.includes("File:Icon")){
+				cats.add("[[Category:Icon images]]")
 			}
 			return cats.size == 0 ? Promise.resolve("Skipped") : Promise.race([bot.edit(page, (rev) => {
 				let currentCats = [...rev.content.matchAll(/\[\[\s*category\s*:[^\]]+\]\]/ig)].map(e => e?.[0].replaceAll("_", " ")),
@@ -279,7 +305,10 @@ void async function(){
 					case "[[Category:Chest tiles]]":
 					case "[[Category:Signature images]]":
 					case "[[Category:Stats images]]":
-						for(let r of ["Skin icons", "Stats", "ranked avatars", "avatars", "Animated Avatars", "Realm images", "UI images", "Taunt images", "Podium images", "Chest images", "Patch images", "Color scheme palettes", "DLC images", "Music", "Sidekick icons", "Sidekick images", "Logo images", "Concept art", "Gadget images", "Emoji images", "Animated KO images", "Podium sounds", "Signature images", "icon images", "chest tiles"]){
+					case "[[Category:Music]]":
+					case "[[Category:Ranked banner images]]":
+					case "[[Category:Portrait images]]":
+						for(let r of ["Skin icons", "Stats", "ranked avatars", "avatars", "Animated Avatars", "realm images", "UI images", "Taunt images", "Podium images", "Chest images", "Patch images", "Color scheme palettes", "DLC images", "Music", "Sidekick icons", "Sidekick images", "Logo images", "Concept art", "Gadget images", "Emoji images", "Animated KO images", "Podium sounds", "Signature images", "icon images", "chest tiles", "ranked banners", "Portrait images", "Official artwork"]){
 							let found = currentCats.find(e => new RegExp(`\\[\\[\\s*category\\s*:\\s*${r}\\s*\\]\\]`, "i").test(e));
 							if(found){
 								content = content.replace(found, "");
