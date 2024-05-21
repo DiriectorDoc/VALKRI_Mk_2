@@ -1,6 +1,6 @@
 const { Mwn } = require("mwn");
 const credentials = require("./password.json"/* Local file */);
-const pagesList = require("./uncategorized.json");
+let pagesList = [];
 const fs = require("node:fs");
 const readline = require("readline");
 let { colours, skins, uiImages, weapons, legends } = require("./patterns.json");
@@ -73,266 +73,126 @@ void async function(){
 	});
 	console.log("Emergency Shutoff activated")
 
+	const catlist = [
+		"Category: Black_skin_images",
+		"Category: Black_weapon_skin_images",
+		"Category: Blue_skin_images",
+		"Category: Blue_weapon_skin_images",
+		"Category: Brown_skin_images",
+		"Category: Brown_weapon_skin_images",
+		"Category: Charged_OG_skin_images",
+		"Category: Charged_OG_weapon_skin_images",
+		"Category: Community_Colors_skin_images",
+		"Category: Community_Colors_weapon_skin_images",
+		"Category: Cyan_skin_images",
+		"Category: Cyan_weapon_skin_images",
+		"Category: Darkheart_skin_images",
+		"Category: Darkheart_weapon_skin_images",
+		"Category: Esports_skin_images",
+		"Category: Esports_weapon_skin_images",
+		"Category: Esports_v.2_skin_images",
+		"Category: Esports_v.2_weapon_skin_images",
+		"Category: Frozen_Forest_skin_images",
+		"Category: Frozen_Forest_weapon_skin_images",
+		"Category: Gala_skin_images",
+		"Category: Gala_weapon_skin_images",
+		"Category: Goldforged_skin_images",
+		"Category: Goldforged_weapon_skin_images",
+		"Category: Green_skin_images",
+		"Category: Green_weapon_skin_images",
+		"Category: Grey_skin_images",
+		"Category: Grey_weapon_skin_images",
+		"Category: Haunting_skin_images",
+		"Category: Haunting_weapon_skin_images",
+		"Category: Heatwave_skin_images",
+		"Category: Heatwave_weapon_skin_images",
+		"Category: Home_Team_skin_images",
+		"Category: Home_Team_weapon_skin_images",
+		"Category: Lovestruck_skin_images",
+		"Category: Lovestruck_weapon_skin_images",
+		"Category: Lucky_Clover_skin_images",
+		"Category: Lucky_Clover_weapon_skin_images",
+		"Category: Orange_skin_images",
+		"Category: Orange_weapon_skin_images",
+		"Category: Pink_skin_images",
+		"Category: Pink_weapon_skin_images",
+		"Category: Purple_skin_images",
+		"Category: Purple_weapon_skin_images",
+		"Category: Red_skin_images",
+		"Category: Red_weapon_skin_images",
+		"Category: Skyforged_skin_images",
+		"Category: Skyforged_weapon_skin_images",
+		"Category: Soul_Fire_skin_images",
+		"Category: Soul_Fire_weapon_skin_images",
+		"Category: Starlight_skin_images",
+		"Category: Starlight_weapon_skin_images",
+		"Category: Sunset_skin_images",
+		"Category: Sunset_weapon_skin_images",
+		"Category: Synthwave_skin_images",
+		"Category: Synthwave_weapon_skin_images",
+		"Category: Verdant_Bloom_skin_images",
+		"Category: Verdant_Bloom_weapon_skin_images",
+		"Category: White_skin_images",
+		"Category: White_weapon_skin_images",
+		"Category: Winter_Holiday_skin_images",
+		"Category: Winter_Holiday_weapon_skin_images",
+		"Category: Yellow_skin_images",
+		"Category: Yellow_weapon_skin_images"
+	],
+		catpatterns = catlist.map(e => new RegExp(`\\[\\[\\s*${e.replaceAll("_", "[_\\s]+").replaceAll(/:\s*/, ":\\s*")}\\s*\\]\\]\\s*(\\n|$)?`, "i"));
+
+	let cont = null;
+	try{
+		for(let c of catlist){
+			console.log(c)
+			do {
+				void await async function retry(){
+					let extention = "";
+					for(let [k, v] of Object.entries(cont ?? {})){
+						extention += `&${k}=${encodeURIComponent(v)}`
+					}
+					let result = await fetch(`https://brawlhalla.wiki.gg/api.php?action=query&format=json&prop=&list=categorymembers&cmtitle=${encodeURIComponent(c)}&cmlimit=5000${extention}`)
+					if(result.status == 429 || result.status == 502){
+						console.log("Retrying in 5")
+						await sleep(5e3)
+						return retry()
+					}
+					result = await result.json()
+					cont = result.continue;
+					if(result.query?.categorymembers){
+						pagesList.push(result.query.categorymembers)
+						return sleep(1000)
+					}
+				}()
+			} while(cont)
+		}
+	} catch(err){
+		console.error(err)
+		exit()
+	}
+
+	pagesList = pagesList.flat(Infinity).filter(e => e?.title).map(e => e.title);
+
 	bot.batchOperation(
 		pagesList,
 		(page, idx) => {
-			let cats = new Set,
-				flag = "none";
-			skinOrWeapon: {
-				for(let c of colours){
-					if(page.includes(` ${c}.png`)){
-						cats.add(`[[Category:${c} images]]`)
-						break skinOrWeapon
+			return Promise.race([bot.edit(page, (rev) => {
+				let content = rev.content;
+				top: {
+					for(let p of catpatterns){
+						if(p.test(content)){
+							content = content.replace(p, "\n")
+							break top
+						}
 					}
+					console.log("Can't find category; Canceling")
+					return false
 				}
-				if(page.includes("Classic Colors.png")){
-					cats.add(flag = "{{delete|Duplicate file}}")
-					break skinOrWeapon
-				}
-				if(skins.some(e => e.test(page))){
-					cats.add(flag = "[[Category:Skin images]]")
-					break skinOrWeapon
-				}
-				if(legends.some(e => page == `File:${e}.png`)){
-					cats.add(flag = "[[Category:Legend images]]")
-					break skinOrWeapon
-				}
-				if(weapons.some(e => page.includes(`File:${e}`))){
-					cats.add(flag = "[[Category:Weapon skin images]]")
-				}
-			}
-			if(uiImages.includes(page.substring(5))){
-				cats.add(flag = "[[Category:UI images]]")
-			}
-			avatar: if(page.includes("File:Avatar")){
-				if(page.includes("Avatar Flag")){
-					cats.add(flag = "[[Category:Flag avatar images]]")
-					break avatar
-				}
-				let match = /Avatar (Diamond|Gold|Participation|Platinum) \d+/.exec(page)
-				if(match){
-					cats.add(`[[Category:${match[1]} ranked avatar images]]`)
-					cats.add(flag = "[[Category:Ranked avatar images]]")
-					break avatar
-				}
-				if(page.includes("Avatar Doodle")){
-					cats.add("[[Category:Doodle avatar images]]")
-					break avatar
-				}
-				cats.add(flag = "[[Category:Avatar images]]")
-			}
-			ani: if(page.includes("File:Ani")){
-				if(page.includes("AniAvatar")){
-					cats.add(flag = "[[Category:Animated avatar images]]")
-				}
-				if(/\(\d*x?\d+px\)\.png/.test(page)){
-					cats.add("[[Category:Alternate resolution images]]")
-					break ani
-				}
-				if(/File:Ani.+\.png/.test(page)){
-					cats.add("[[Category:Animated PNGs]]")
-				}
-			}
-			if(page.includes("File:BGS ")){
-				cats.add("[[Category:Brawlhalla Grand Slam images]]")
-			}
-			// if(page.indexOf(".mp3") == page.length - 4){
-			// 	cats.push("[[Category:Sound files]]")
-			// }
-			if(/Battlepass BP\d/.test(page)){
-				cats.add(flag = "[[Category:Battle Pass images]]")
-			}
-			if(/Battlepass.+\.mp3/.test(page)){
-				cats.add(flag = "[[Category:Battle Pass music]]")
-			}
-			if(/Border .+ Chest/.test(page)){
-				cats.add("[[Category:Chest border images]]")
-			}
-			if((page.includes("File:Bot ") && cats.size == 0) || page.includes("File:AniBot")){
-				cats.add(flag = "[[Category:Sidekick images]]")
-			}
-			if(page.includes("File:BotIcon")){
-				cats.add(flag = "[[Category:Sidekick icons]]")
-			}
-			if(page.includes("File:Achievement")){
-				cats.add("[[Category:Achievement images]]")
-			}
-			if(page.includes("File:Button ")){
-				cats.add("[[Category:Controls images]]")
-			}
-			if(page.includes("Brawlhalla Logo") || page.includes("File:Logo") || page.includes("Logo.png")){
-				cats.add(flag = "[[Category:Logo images]]")
-			}
-			if(page.includes("File:Color ")){
-				cats.add("[[Category:Color icon images]]")
-			}
-			if(/Concept\s?Art/i.test(page)){
-				cats.add(flag = "[[Category:Concept art]]")
-			}
-			if(page.includes("File:Demo ")){
-				cats.add("[[Category:Mechanics demos]]")
-			}
-			if(page.includes("File:Emoji ")){
-				cats.add(flag = "[[Category:Emoji images]]")
-			}
-			if(page.includes("File:Flag of ")){
-				cats.add(flag = "[[Category:Region flags]]")
-			}
-			if(/Gadget [^0-9]+\.png/.test(page)){
-				cats.add(flag = "[[Category:Gadget images]]")
-			}
-			if(/KO .+\.gif/.test(page)){
-				cats.add(flag = "[[Category:Animated KO images]]")
-			}
-			if(page.includes("File:KO SFX")){
-				cats.add("[[Category:KO sound effects]]")
-			}
-			if(page.includes("File:Loading")){
-				cats.add("[[Category:Loading frame images]]")
-			}
-			if(page.includes("File:Map ")){
-				cats.add(flag = "[[Category:Map images]]")
-			}
-			if(page.includes("File:Nav ")){
-				cats.add("[[Category:Navigation button images]]")
-			}
-			if(page.includes("Official Artwork")){
-				cats.add(flag = "[[Category:Official artwork]]")
-			}
-			if(page.includes("File:Palette")){
-				cats.add(flag = "[[Category:Color scheme palettes]]")
-			}
-			if(/Patch\d+/.test(page)){
-				cats.add(flag = "[[Category:Patch images]]")
-			}
-			if(page.includes("Chest.png")){
-				cats.add(flag = "[[Category:Chest images]]")
-			}
-			if(page.includes("Chest Tile.jpg")){
-				cats.add(flag = "[[Category:Chest tiles]]")
-			}
-			if(/File:Podium.+.png/.test(page)){
-				cats.add(flag = "[[Category:Podium images]]")
-			}
-			if(page.includes("File:Podium SFX")){
-				cats.add(flag = "[[Category:Podium sounds]]")
-			}
-			if(page.includes("File:Portrait")){
-				cats.add(flag = "[[Category:Portrait images]]")
-			}
-			if(page.includes("File:Profile")){
-				cats.add("[[Category:Profiles of people]]")
-			}
-			if(page.includes("File:STC")){
-				cats.add("[[Category:Steam Trading Cards images]]")
-			}
-			if(page.includes("File:Sig ")){
-				cats.add(flag = "[[Category:Signature images]]")
-			}
-			if(page.includes("SkinIcon")){
-				cats.add(flag = "[[Category:Skin icons]]")
-			}
-			if(/File:Stats\d\w*1?\.png/.test(page)){
-				cats.add(flag = "[[Category:Stats images]]")
-			}
-			if(page.includes("StatIcon")){
-				cats.add("[[Category:Stat icons]]")
-			}
-			if(page.includes("Pack.jpg")){
-				cats.add(flag = "[[Category:DLC images]]")
-			}
-			if(/File:Taunt.+\.png/.test(page)){
-				cats.add(flag = "[[Category:Taunt images]]")
-			}
-			if(/File:Taunt.+\.mp3/.test(page)){
-				cats.add("[[Category:Taunt sound effects]]")
-			}
-			if(page.includes("Theme.mp3") || /Level.+\.mp3/i.test(page)){
-				cats.add(flag = "[[Category:Music]]")
-			}
-			if(page.includes("Banner Rank")){
-				cats.add(flag = "[[Category:Ranked banner images]]")
-			}
-			// if(page.includes("100M")){
-			// 	cats.add(flag = "[[Category:100 Million Brawlers images]]")
-			// }
-			if(page.includes("Cassidy's Cupcake") || page.includes("File:CC ")){
-				cats.add("[[Category:Cassidy's Cupcakes images]]")
-			}
-			if(/\bpromo\b/i.test(page)){
-				cats.add("[[Category:Promo images]]")
-			}
-			if(/icon\.png/i.test(page) || page.includes("EventIcon") || page.includes("File:Icon")){
-				cats.add("[[Category:Icon images]]")
-			}
-			return cats.size == 0 ? Promise.resolve("Skipped") : Promise.race([bot.edit(page, (rev) => {
-				let currentCats = [...rev.content.matchAll(/\[\[\s*category\s*:[^\]]+\]\]/ig)].map(e => e?.[0].replaceAll("_", " ")),
-					content = rev.content.replaceAll("_", " "),
-					message = "Added";
-				switch(flag){
-					case "{{delete|Duplicate file}}":
-						return {
-							// return parameters needed for [[mw:API:Edit]]
-							text: content === "" ? sortAndJoin(cats) : `${content.trim()}\n${sortAndJoin(cats)}`,
-							summary: "Tagging for deletion",
-							minor: true
-						}
-					case "[[Category:Ranked avatar images]]":
-					case "[[Category:Avatar images]]":
-					case "[[Category:Flag avatar images]]":
-					case "[[Category:Animated avatar images]]":
-					case "[[Category:Animated KO images]]":
-					case "[[Category:Skin images]]":
-					case "[[Category:Skin icons]]":
-					case "[[Category:DLC images]]":
-					case "[[Category:UI images]]":
-					case "[[Category:Stat images]]":
-					case "[[Category:Map images]]":
-					case "[[Category:Battle Pass music]]":
-					case "[[Category:Sidekick icons]]":
-					case "[[Category:Sidekick images]]":
-					case "[[Category:Logo images]]":
-					case "[[Category:Concept art]]":
-					case "[[Category:Gadget images]]":
-					case "[[Category:Emoji images]]":
-					case "[[Category:Map images]]":
-					case "[[Category:Color scheme palettes]]":
-					case "[[Category:Patch images]]":
-					case "[[Category:Podium images]]":
-					case "[[Category:Taunt images]]":
-					case "[[Category:Podium sounds]]":
-					case "[[Category:Chest images]]":
-					case "[[Category:Chest tiles]]":
-					case "[[Category:Signature images]]":
-					case "[[Category:Stats images]]":
-					case "[[Category:Music]]":
-					case "[[Category:Ranked banner images]]":
-					case "[[Category:Portrait images]]":
-						for(let r of ["Skin icons", "Stats", "ranked avatars", "avatars", "animated Avatars", "realm images", "UI images", "Taunt images", "Podium images", "Chest images", "Patch images", "Color scheme palettes", "DLC images", "Music", "Sidekick icons", "Sidekick images", "Logo images", "Concept art", "Gadget images", "Emoji images", "Animated KO images", "Podium sounds", "Signature images", "icon images", "chest tiles", "ranked banners", "Portrait images", "Official artwork"]){
-							let found = currentCats.find(e => new RegExp(`\\[\\[\\s*category\\s*:\\s*${r}\\s*\\]\\]`, "i").test(e));
-							if(found){
-								content = content.replace(found, "");
-								currentCats = currentCats.filter(e => e != found)
-								if(found == `[[Category:${r}]]`){
-									cats.delete(`[[Category:${r}]]`)
-									cats.add(`[[category:${r}]]`)
-								}
-							}
-						}
-						message = "Tweaked";
-					default:
-						for(let c of currentCats){
-							let exec = /\[\[\s*category\s*:\s*(.+)\s*\]\]/i.exec(c);
-							cats.add(`[[Category:${exec[1][0].toUpperCase()}${exec[1].substring(1)}]]`)
-							content = content.replace(exec[0], "")
-						}
-						content = content === "" ? sortAndJoin(cats) : `${content.trim()}\n${sortAndJoin(cats)}`
-						return {
-							// return parameters needed for [[mw:API:Edit]]
-							text: content == rev.content ? content.replace("Category", "category") : content,
-							summary: `${message} categor${cats.size == 1 ? "y" : "ies"}`,
-							minor: true
-						}
+				return {
+					// return parameters needed for [[mw:API:Edit]]
+					text: content,
+					summary: "Removed category",
+					minor: true
 				}
 			}).catch(err => console.log(err)).then(() => done.push(page)), sleep(4500)]).then(e => sleep(e == "sleep" ? 10000 : 2750))
 		},
