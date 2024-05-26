@@ -3,9 +3,7 @@ const credentials = require("./password.json"/* Local file */);
 let pagesList = [];
 const fs = require("node:fs");
 const readline = require("readline");
-let { colours, skins, uiImages, weapons, legends } = require("./patterns.json");
-
-skins = skins.map(e => new RegExp(`File:(Ani)?${e}\\s?(Level \\d|\\(idle\\)|\\(lock-in\\))?\\.(png|gif)`, "i"));
+let { colours, weapons, legends } = require("./patterns.json");
 
 readline.emitKeypressEvents(process.stdin);
 
@@ -73,130 +71,60 @@ void async function(){
 	});
 	console.log("Emergency Shutoff activated")
 
-	const catlist = [
-		"Category: Black_skin_images",
-		"Category: Black_weapon_skin_images",
-		"Category: Blue_skin_images",
-		"Category: Blue_weapon_skin_images",
-		"Category: Brown_skin_images",
-		"Category: Brown_weapon_skin_images",
-		"Category: Charged_OG_skin_images",
-		"Category: Charged_OG_weapon_skin_images",
-		"Category: Community_Colors_skin_images",
-		"Category: Community_Colors_weapon_skin_images",
-		"Category: Cyan_skin_images",
-		"Category: Cyan_weapon_skin_images",
-		"Category: Darkheart_skin_images",
-		"Category: Darkheart_weapon_skin_images",
-		"Category: Esports_skin_images",
-		"Category: Esports_weapon_skin_images",
-		"Category: Esports_v.2_skin_images",
-		"Category: Esports_v.2_weapon_skin_images",
-		"Category: Frozen_Forest_skin_images",
-		"Category: Frozen_Forest_weapon_skin_images",
-		"Category: Gala_skin_images",
-		"Category: Gala_weapon_skin_images",
-		"Category: Goldforged_skin_images",
-		"Category: Goldforged_weapon_skin_images",
-		"Category: Green_skin_images",
-		"Category: Green_weapon_skin_images",
-		"Category: Grey_skin_images",
-		"Category: Grey_weapon_skin_images",
-		"Category: Haunting_skin_images",
-		"Category: Haunting_weapon_skin_images",
-		"Category: Heatwave_skin_images",
-		"Category: Heatwave_weapon_skin_images",
-		"Category: Home_Team_skin_images",
-		"Category: Home_Team_weapon_skin_images",
-		"Category: Lovestruck_skin_images",
-		"Category: Lovestruck_weapon_skin_images",
-		"Category: Lucky_Clover_skin_images",
-		"Category: Lucky_Clover_weapon_skin_images",
-		"Category: Orange_skin_images",
-		"Category: Orange_weapon_skin_images",
-		"Category: Pink_skin_images",
-		"Category: Pink_weapon_skin_images",
-		"Category: Purple_skin_images",
-		"Category: Purple_weapon_skin_images",
-		"Category: Red_skin_images",
-		"Category: Red_weapon_skin_images",
-		"Category: Skyforged_skin_images",
-		"Category: Skyforged_weapon_skin_images",
-		"Category: Soul_Fire_skin_images",
-		"Category: Soul_Fire_weapon_skin_images",
-		"Category: Starlight_skin_images",
-		"Category: Starlight_weapon_skin_images",
-		"Category: Sunset_skin_images",
-		"Category: Sunset_weapon_skin_images",
-		"Category: Synthwave_skin_images",
-		"Category: Synthwave_weapon_skin_images",
-		"Category: Verdant_Bloom_skin_images",
-		"Category: Verdant_Bloom_weapon_skin_images",
-		"Category: White_skin_images",
-		"Category: White_weapon_skin_images",
-		"Category: Winter_Holiday_skin_images",
-		"Category: Winter_Holiday_weapon_skin_images",
-		"Category: Yellow_skin_images",
-		"Category: Yellow_weapon_skin_images"
-	],
-		catpatterns = catlist.map(e => new RegExp(`\\[\\[\\s*${e.replaceAll("_", "[_\\s]+").replaceAll(/:\s*/, ":\\s*")}\\s*\\]\\]\\s*(\\n|$)?`, "i"));
+	const pagesList = [
+		"File:Cannon_The_Big_Bang_Esports_v.5_1_983x1280.png",
+		"File:Cannon_Tactical_Cannon_Esports_v.5_1_821x1280.png",
+		"File:Cannon_Swamp_Serum_Esports_v.5_1_905x1280.png",
+		"File:Cannon_Stryge_Esports_v.5_1_915x1280.png",
+		"File:Cannon_Stalwart_Screech_Esports_v.5_1_1090x1280.png",
+		"File:Cannon_SPNKr_Rocket_Launcher_Esports_v.5_1_861x1281.png",
+		"File:Cannon_Sonic_Boom_Esports_v.5_1_1092x1280.png",
+		"File:Cannon_Snowsmoke_Esports_v.5_1_986x1280.png",
+		"File:Cannon_Royal_Decree_Esports_v.5_1_923x1281.png",
+		"File:Cannon_Royal_Allegiance_Esports_v.5_1_966x1281.png",
+		"File:Cannon_RGB_Cannon_Esports_v.5_1_959x1280.png",
+		"File:Cannon_Revolver_Cannon_Esports_v.5_1_1067x1280.png",
+		"File:Cannon_Railgun_Esports_v.5_1_1076x1280.png",
+		"File:Cannon_Pyrois_Blast_Esports_v.5_1_1056x1280.png",
+		"File:Cannon_Power_Flash_Esports_v.5_1_892x1280.png",
+		"File:Cannon_Plasma_Cannon_Esports_v.5_1_883x1279.png",
+		"File:Cannon_Orchard_Barrel_Esports_v.5_1_895x1281.png",
+		"File:Cannon_Optimized_Odzutsu_Esports_v.5_1_914x1280.png",
+		"File:Cannon_Ol'_Faithful_Esports_v.5_1_937x1280.png",
+		"File:Cannon_Nightmare_Mandible_Esports_v.5_1_981x1279.png",
+		"File:Cannon_Modern_Thunder_Esports_v.5_1_910x1281.png",
+		"File:Cannon_Mk1_Cannon_Esports_v.5_1_1119x1280.png",
+		"File:Cannon_Mammothade_Cooler_Esports_v.5_1_954x1280.png",
+		"File:Cannon_Locker_Boom_Esports_v.5_1_994x1281.png",
+		"File:Cannon_Laser_Light_Cannon_Esports_v.5_1_974x1280.png",
+		"File:Cannon_Koi_Cannon_Esports_v.5_1_1110x1280.png",
+		"File:Cannon_Kanabo_Esports_v.5_1_979x1280.png",
+		"File:Cannon_Jade_Dragon_Esports_v.5_1_1024x1281.png",
+		"File:Cannon_Howling_Siren_Esports_v.5_1_1309x1281.png"
+	]
 
-	let cont = null;
-	try{
-		for(let c of catlist){
-			console.log(c)
-			do {
-				void await async function retry(){
-					let extention = "";
-					for(let [k, v] of Object.entries(cont ?? {})){
-						extention += `&${k}=${encodeURIComponent(v)}`
-					}
-					let result = await fetch(`https://brawlhalla.wiki.gg/api.php?action=query&format=json&prop=&list=categorymembers&cmtitle=${encodeURIComponent(c)}&cmlimit=5000${extention}`)
-					if(result.status == 429 || result.status == 502){
-						console.log("Retrying in 5")
-						await sleep(5e3)
-						return retry()
-					}
-					result = await result.json()
-					cont = result.continue;
-					if(result.query?.categorymembers){
-						pagesList.push(result.query.categorymembers)
-						return sleep(1000)
-					}
-				}()
-			} while(cont)
-		}
-	} catch(err){
-		console.error(err)
-		exit()
-	}
+	const pat = new RegExp(`File:(${weapons.join("|").replaceAll(" ", "_")})_(.+)_(${colours.join("|").replaceAll(" ", "_")})_\\d+_\\d+x\\d+.png`, "i");
 
-	pagesList = pagesList.flat(Infinity).filter(e => e?.title).map(e => e.title);
+	/*
+	
+	If there are too many requests, instead of retrying, this bot will just skip renaming.
+	To fix this (in the future), after the batchOperation is "done", check how many pf the
+	pages were actually renamed, and remove those from the pageList and retry. Keep retrying
+	for as long as the pageList shrinks.
+	
+	*/
 
 	bot.batchOperation(
 		pagesList,
 		(page, idx) => {
-			return Promise.race([bot.edit(page, (rev) => {
-				let content = rev.content;
-				top: {
-					for(let p of catpatterns){
-						if(p.test(content)){
-							content = content.replace(p, "\n")
-							break top
-						}
-					}
-					console.log("Can't find category; Canceling")
-					return false
-				}
-				return {
-					// return parameters needed for [[mw:API:Edit]]
-					text: content,
-					summary: "Removed category",
-					minor: true
-				}
+			let exec = pat.exec(page),
+				newPage = `File:${exec[2]}_${exec[3]}.png`;
+			return Promise.race([bot.move(page, newPage, "Fixed name", {
+				movesubpages: true,
+				movetalk: true
 			}).catch(err => console.log(err)).then(() => done.push(page)), sleep(4500)]).then(e => sleep(e == "sleep" ? 10000 : 2750))
 		},
-		/* concurrency */ 3,
+		1,//* concurrency */ 3,
 		/* retries */ 2
 	).then(exit);
 
