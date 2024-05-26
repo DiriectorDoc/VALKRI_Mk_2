@@ -71,39 +71,55 @@ void async function(){
 	});
 	console.log("Emergency Shutoff activated")
 
-	const pagesList = [
-		"File:Cannon_The_Big_Bang_Esports_v.5_1_983x1280.png",
-		"File:Cannon_Tactical_Cannon_Esports_v.5_1_821x1280.png",
-		"File:Cannon_Swamp_Serum_Esports_v.5_1_905x1280.png",
-		"File:Cannon_Stryge_Esports_v.5_1_915x1280.png",
-		"File:Cannon_Stalwart_Screech_Esports_v.5_1_1090x1280.png",
-		"File:Cannon_SPNKr_Rocket_Launcher_Esports_v.5_1_861x1281.png",
-		"File:Cannon_Sonic_Boom_Esports_v.5_1_1092x1280.png",
-		"File:Cannon_Snowsmoke_Esports_v.5_1_986x1280.png",
-		"File:Cannon_Royal_Decree_Esports_v.5_1_923x1281.png",
-		"File:Cannon_Royal_Allegiance_Esports_v.5_1_966x1281.png",
-		"File:Cannon_RGB_Cannon_Esports_v.5_1_959x1280.png",
-		"File:Cannon_Revolver_Cannon_Esports_v.5_1_1067x1280.png",
-		"File:Cannon_Railgun_Esports_v.5_1_1076x1280.png",
-		"File:Cannon_Pyrois_Blast_Esports_v.5_1_1056x1280.png",
-		"File:Cannon_Power_Flash_Esports_v.5_1_892x1280.png",
-		"File:Cannon_Plasma_Cannon_Esports_v.5_1_883x1279.png",
-		"File:Cannon_Orchard_Barrel_Esports_v.5_1_895x1281.png",
-		"File:Cannon_Optimized_Odzutsu_Esports_v.5_1_914x1280.png",
-		"File:Cannon_Ol'_Faithful_Esports_v.5_1_937x1280.png",
-		"File:Cannon_Nightmare_Mandible_Esports_v.5_1_981x1279.png",
-		"File:Cannon_Modern_Thunder_Esports_v.5_1_910x1281.png",
-		"File:Cannon_Mk1_Cannon_Esports_v.5_1_1119x1280.png",
-		"File:Cannon_Mammothade_Cooler_Esports_v.5_1_954x1280.png",
-		"File:Cannon_Locker_Boom_Esports_v.5_1_994x1281.png",
-		"File:Cannon_Laser_Light_Cannon_Esports_v.5_1_974x1280.png",
-		"File:Cannon_Koi_Cannon_Esports_v.5_1_1110x1280.png",
-		"File:Cannon_Kanabo_Esports_v.5_1_979x1280.png",
-		"File:Cannon_Jade_Dragon_Esports_v.5_1_1024x1281.png",
-		"File:Cannon_Howling_Siren_Esports_v.5_1_1309x1281.png"
-	]
+	const pagesRename = {
+		"Modular Riff Ember": "Modular Rift Ember",
+		"Grau Mestra Batista": "Grã-mestra Batista",
+		"Lacrimosa": "Scythe of Mercy",
+		"Adagio": "Bow of Mercy",
+		"Beach Ball Orb": "Beach Ball",
+		"PegaSwift Boots": "PegaSwift Runners",
+		"Irridium Engine": "Iridium Engine"
+	},
+		pats = {};
+	Object.keys(pagesRename).forEach(k => pats[k] = new RegExp(k.replaceAll(" ", "[\\s_]"), "i"))
+	let pagesList = [];
+	function patany(k){
+		return new RegExp(`File:${k.replaceAll(" ", "[\\s_]")}([\\s_](${colours.join("|").replaceAll(" ", "[\\s_]")}))?.png`, "i")
+	}
 
-	const pat = new RegExp(`File:(${weapons.join("|").replaceAll(" ", "_")})_(.+)_(${colours.join("|").replaceAll(" ", "_")})_\\d+_\\d+x\\d+.png`, "i");
+	let cont = null;
+	try {
+		for(let r of Object.keys(pagesRename)){
+			console.log(r)
+			do {
+				void await async function retry(){
+					let extention = "";
+					for(let [k, v] of Object.entries(cont ?? {})){
+						extention += `&${k}=${encodeURIComponent(v)}`
+					}
+					let result = await fetch(`https://brawlhalla.wiki.gg/api.php?action=query&format=json&list=search&srsearch=${encodeURIComponent(r)}&srnamespace=6&srlimit=5000${extention}`)
+					if(result.status == 429 || result.status == 502){
+						console.log("Retrying in 5")
+						await sleep(5e3)
+						return retry()
+					}
+					result = await result.json()
+					cont = result.continue;
+					if(result.query?.search){
+						pagesList.push(result.query.search.map(e => e.title).filter(e => patany(r).test(e)))
+						return sleep(1000)
+					}
+				}()
+			} while(cont)
+		}
+	} catch(err){
+		console.error(err)
+		exit()
+	}
+
+	pagesList = pagesList.flat(Infinity);
+
+	console.log(pagesList)
 
 	/*
 	
@@ -117,12 +133,16 @@ void async function(){
 	bot.batchOperation(
 		pagesList,
 		(page, idx) => {
-			let exec = pat.exec(page),
-				newPage = `File:${exec[2]}_${exec[3]}.png`;
-			return Promise.race([bot.move(page, newPage, "Fixed name", {
+			let newPage = false;
+			for(let [k, v] of Object.entries(pagesRename)){
+				if(pats[k].test(page)){
+					newPage = page.replace(pats[k], v)
+				}
+			}
+			return newPage && Promise.race([bot.move(page, newPage, "Fixed name", {
 				movesubpages: true,
 				movetalk: true
-			}).catch(err => console.log(err)).then(() => done.push(page)), sleep(4500)]).then(e => sleep(e == "sleep" ? 10000 : 2750))
+			}).catch(err => console.log(err)).then(() => {done.push(page); return sleep(3000)}), sleep(4500)]).then(e => sleep(e == "sleep" ? 10000 : 2750))
 		},
 		1,//* concurrency */ 3,
 		/* retries */ 2
