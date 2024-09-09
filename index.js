@@ -5,18 +5,22 @@ const fs = require("node:fs");
 const readline = require("readline");
 let { colours, weapons, legends } = require("./patterns.json");
 
+const getMP3Duration = require('get-mp3-duration');
+
+const uiImages = require("./uiImages.json");
+
 readline.emitKeypressEvents(process.stdin);
 
 if (process.stdin.isTTY)
-    process.stdin.setRawMode(true);
+		process.stdin.setRawMode(true);
 
 console.log("press q to exit, or any key to print log")
 
 process.stdin.on("keypress", (chunk, key) => {
-  if(key && key.name == "q"){
+	if(key && key.name == "q"){
 	console.log('"q" received; Exiting');
-    exit();
-  }
+		exit();
+	}
 });
 
 let interval,
@@ -71,1382 +75,361 @@ void async function(){
 	});
 	console.log("Emergency Shutoff activated")
 
-	const pagesList = [
-    "File:Hand of Horus Mirage Team Blue.png",
-    "File:Hand Wraps Team Blue.png",
-    "File:Hand-Saw Team Blue.png",
-    "File:Handcrafted Cannon Team Blue.png",
-    "File:Hands of Fate Team Blue.png",
-    "File:Hands of the Cosmos Team Blue.png",
-    "File:Harbinger Orion Team Blue.png",
-    "File:Hardlight Blade Team Blue.png",
-    "File:Hardlight Blasters Team Blue.png",
-    "File:Hardlight Gauntlets Team Blue.png",
-    "File:Hardlight Greatsword Team Blue.png",
-    "File:Hardlight Orb Team Blue.png",
-    "File:Hardsuit Val Team Blue.png",
-    "File:Harlequin Caspian Team Blue.png",
-    "File:Harpy Brynn Team Blue.png",
-    "File:Harvest Cleaver Team Blue.png",
-    "File:Harvest Sickle Team Blue.png",
-    "File:Hattori Hanzo Sword Team Blue.png",
-    "File:Hattori Team Blue.png",
-    "File:Haunted Hook Team Blue.png",
-    "File:Haunted Incisor Team Blue.png",
-    "File:Haunting Blades Team Blue.png",
-    "File:Haunting Terrors Level 1 Team Blue.png",
-    "File:Haunting Terrors Level 2 Team Blue.png",
-    "File:Haunting Terrors Level 3 Team Blue.png",
-    "File:Headache Team Blue.png",
-    "File:Headmaster Fait Team Blue.png",
-    "File:Heart Flutter Team Blue.png",
-    "File:Heart of Gold Team Blue.png",
-    "File:Heart of Hathor Mirage Team Blue.png",
-    "File:Heart of the Volcano Team Blue.png",
-    "File:Heartaches Team Blue.png",
-    "File:Heartbleed Team Blue.png",
-    "File:Heartbreak Havoc Team Blue.png",
-    "File:Heartbreaker Barraza Team Blue.png",
-    "File:Heartbreaker Team Blue.png",
-    "File:Heartseeker Team Blue.png",
-    "File:Heartstring Team Blue.png",
-    "File:Heartthrob Team Blue.png",
-    "File:Heatblast Team Blue.png",
-    "File:Heaven Cleaver Team Blue.png",
-    "File:Heaven's Order Team Blue.png",
-    "File:Heaven's Touch Team Blue.png",
-    "File:Heavy Chopper Team Blue.png",
-    "File:Heavy Hitter Team Blue.png",
-    "File:Heimdall's Call Team Blue.png",
-    "File:Heirloom (Hammer Skin) Team Blue.png",
-    "File:Heirloom Team Blue.png",
-    "File:Helios Reign Team Blue.png",
-    "File:Helios' Gems Team Blue.png",
-    "File:Hell's Hearts Team Blue.png",
-    "File:Hellboy Team Blue.png",
-    "File:Hellhounds Team Blue.png",
-    "File:Hello Katars Team Blue.png",
-    "File:Hidden Blades Team Blue.png",
-    "File:Hidden Dragon Team Blue.png",
-    "File:High Frequency Yumiko Team Blue.png",
-    "File:High Impact Sentinel Team Blue.png",
-    "File:High Noon Cassidy Team Blue.png",
-    "File:High Noon Team Blue.png",
-    "File:High Priestess Nai Team Blue.png",
-    "File:High Tide Team Blue.png",
-    "File:High-Impact Hammer Team Blue.png",
-    "File:High-Voltage Rippers Team Blue.png",
-    "File:Highland Hammer Team Blue.png",
-    "File:Highwayman's Flintlocks Team Blue.png",
-    "File:Hippokampos Team Blue.png",
-    "File:His Nice Shoes Team Blue.png",
-    "File:Hit Hard Team Blue.png",
-    "File:Hit Often Team Blue.png",
-    "File:Holiday Fear Team Blue.png",
-    "File:Holly Jolly Ember Team Blue.png",
-    "File:Holly Jolly Team Blue.png",
-    "File:Holy Covenant Team Blue.png",
-    "File:Home Run Team Blue.png",
-    "File:Honeybeeno Team Blue.png",
-    "File:Honor Bound Cross Team Blue.png",
-    "File:Honor's Edge Team Blue.png",
-    "File:Honorbound Team Blue.png",
-    "File:Hook Setter Team Blue.png",
-    "File:Horn of the Scarab Team Blue.png",
-    "File:Horned Carver Team Blue.png",
-    "File:Horror & Fright Team Blue.png",
-    "File:Horseman Lucien Team Blue.png",
-    "File:Hot Choco Orb Team Blue.png",
-    "File:Hot Lava Team Blue.png",
-    "File:Hotline Slash Team Blue.png",
-    "File:Hotshot Vector Team Blue.png",
-    "File:Hound's Fangs Team Blue.png",
-    "File:Howlin' Skull Team Blue.png",
-    "File:Howling Siren Team Blue.png",
-    "File:Hraesvelgr's Eyes Team Blue.png",
-    "File:Hugin Team Blue.png",
-    "File:Humble Hands Team Blue.png",
-    "File:Hunter's Pride Team Blue.png",
-    "File:Hunter's Reach Team Blue.png",
-    "File:Hunter's Tail Team Blue.png",
-    "File:Hunting Spear Team Blue.png",
-    "File:Huntress Kaya Team Blue.png",
-    "File:Huntsman Volkov Team Blue.png",
-    "File:Hussar's Prize Team Blue.png",
-    "File:Hwarang Jaeyun Team Blue.png",
-    "File:Hydro-Bow Team Blue.png",
-    "File:Hyper Cleave Team Blue.png",
-    "File:Hyper Turbo Axe Team Blue.png",
-    "File:Hyperdrift Vector Team Blue.png",
-    "File:I've Got Spirit! Team Blue.png",
-    "File:Ice 'Em Team Blue.png",
-    "File:Ice Angling Team Blue.png",
-    "File:Ice Crusher Team Blue.png",
-    "File:Ice Fishing Team Blue.png",
-    "File:Ice Pick Team Blue.png",
-    "File:Ice Sickle Team Blue.png",
-    "File:Ice Slicer Team Blue.png",
-    "File:Icy Slicers Team Blue.png",
-    "File:Idle Hands Team Blue.png",
-    "File:Immortal Caspian Team Blue.png",
-    "File:Immortal Pike Team Blue.png",
-    "File:Imperial Decree Team Blue.png",
-    "File:Imperial Lord Dusk Team Blue.png",
-    "File:Imperial Rocket Team Blue.png",
-    "File:Imperial Seals Team Blue.png",
-    "File:Imperial Star Lance Team Blue.png",
-    "File:In Case of Brawl Team Blue.png",
-    "File:In Health Team Blue.png",
-    "File:In Sickness Team Blue.png",
-    "File:Inari Yumiko Team Blue.png",
-    "File:Infernal Cross Team Blue.png",
-    "File:Infernal Warlock Volkov Team Blue.png",
-    "File:Inferno Ragnir Team Blue.png",
-    "File:Infinite & Absolute Team Blue.png",
-    "File:Infinite Wu Shang Team Blue.png",
-    "File:Infinity Blades Team Blue.png",
-    "File:Inscription Team Blue.png",
-    "File:Interface Team Blue.png",
-    "File:Interstellar Rocket Team Blue.png",
-    "File:Into the Abyss Team Blue.png",
-    "File:Iridium Engine Team Blue.png",
-    "File:Iron Fury Team Blue.png",
-    "File:Iron Lady Artemis Team Blue.png",
-    "File:Iron Legion Mordex Team Blue.png",
-    "File:Iron Legion Teros Team Blue.png",
-    "File:Iron Mallet Team Blue.png",
-    "File:Iron Might Team Blue.png",
-    "File:Iron Shackles Team Blue.png",
-    "File:Iron Standard Team Blue.png",
-    "File:Iron Steel Claws Team Blue.png",
-    "File:Ironcaster Team Blue.png",
-    "File:Isaiah Team Blue.png",
-    "File:Island Azoth Team Blue.png",
-    "File:Isu Apple Team Blue.png",
-    "File:Ivaldi Design Team Blue.png",
-    "File:Ivaldi's Wings Team Blue.png",
-    "File:Ivory Snare Team Blue.png",
-    "File:Ivy Charger Team Blue.png",
-    "File:Jade Crescent Team Blue.png",
-    "File:Jade Dragon Team Blue.png",
-    "File:Jade Truth Team Blue.png",
-    "File:Jaeyun Team Blue.png",
-    "File:Jaguar Claws Team Blue.png",
-    "File:Jaguar Paws Team Blue.png",
-    "File:Jake Fists Team Blue.png",
-    "File:Jake Team Blue.png",
-    "File:Jar-O-Honey Team Blue.png",
-    "File:Jawbreakers Team Blue.png",
-    "File:Jaws of the Oni Team Blue.png",
-    "File:Jedi Training Remote Team Blue.png",
-    "File:Jellyfishing Net Team Blue.png",
-    "File:Jewel of the Forest Team Blue.png",
-    "File:Jhala Team Blue.png",
-    "File:Jiro Team Blue.png",
-    "File:Jiro the Specialist Team Blue.png",
-    "File:John Cena Team Blue.png",
-    "File:Joint Pain Team Blue.png",
-    "File:Jolly Ripper Team Blue.png",
-    "File:Jotun Ulgrim Team Blue.png",
-    "File:Jubilation Blasters Team Blue.png",
-    "File:Judge and Jury Team Blue.png",
-    "File:Judgement Team Blue.png",
-    "File:Judgment Claws Team Blue.png",
-    "File:Jupiter Rising Team Blue.png",
-    "File:Jurassic Gnash Team Blue.png",
-    "File:Just Dead Team Blue.png",
-    "File:Justice Bolt Team Blue.png",
-    "File:Jörmungandr Mako Level 1 Team Blue.png",
-    "File:Jörmungandr Mako Level 2 Team Blue.png",
-    "File:Jörmungandr Mako Level 3 Team Blue.png",
-    "File:Jötunn Armaments Team Blue.png",
-    "File:Kabuki Hattori Team Blue.png",
-    "File:Kabuto Orion Team Blue.png",
-    "File:Kah-Rah-Tay Gloves Team Blue.png",
-    "File:Kakurenbo Team Blue.png",
-    "File:Kami Bow Team Blue.png",
-    "File:Kanabo Korosu Team Blue.png",
-    "File:Kanabo Team Blue.png",
-    "File:Katana Team Blue.png",
-    "File:Katars of Mercy Team Blue.png",
-    "File:Katars of the Raven Team Blue.png",
-    "File:KaTR-808 Team Blue.png",
-    "File:Kaya Team Blue.png",
-    "File:Kelpie Thea Team Blue.png",
-    "File:Ken Team Blue.png",
-    "File:Kern Koji Team Blue.png",
-    "File:Ketchup & Mustard Team Blue.png",
-    "File:Key to Your Heart Team Blue.png",
-    "File:Keytar Slash Team Blue.png",
-    "File:Kill Thrill Hattori Team Blue.png",
-    "File:Kindergarten Kaya Team Blue.png",
-    "File:King Knight Team Blue.png",
-    "File:King Roland Team Blue.png",
-    "File:Kingdom Bow Team Blue.png",
-    "File:Kingly Lance Team Blue.png",
-    "File:Kingpin Scythe Team Blue.png",
-    "File:Kingsblade Team Blue.png",
-    "File:Kiss of Fire Team Blue.png",
-    "File:Kitsune Hattori Team Blue.png",
-    "File:Knifebeak Team Blue.png",
-    "File:Knockouts Team Blue.png",
-    "File:Knowledge is Key Team Blue.png",
-    "File:Koa Wood Axe Team Blue.png",
-    "File:Koi Cannon Team Blue.png",
-    "File:Koinobori Team Blue.png",
-    "File:Koji Team Blue.png",
-    "File:Komainu Jiro Team Blue.png",
-    "File:Kor in Space Team Blue.png",
-    "File:Kor Team Blue.png",
-    "File:Kor Wrecking LLC Team Blue.png",
-    "File:Kraken Sidra Team Blue.png",
-    "File:Kraken's Key Team Blue.png",
-    "File:Krampus Cross Team Blue.png",
-    "File:Krusty Krab Spatula Team Blue.png",
-    "File:Kukri Carver Team Blue.png",
-    "File:Kunoichi Val Team Blue.png",
-    "File:La Guitarra Team Blue.png",
-    "File:Lacrosse Check Team Blue.png",
-    "File:Lady of the Dead Nai Team Blue.png",
-    "File:Laplace's Demon Team Blue.png",
-    "File:Lara Croft Team Blue.png",
-    "File:Lara's Bow Team Blue.png",
-    "File:Las Viudas Team Blue.png",
-    "File:Laser Blazers Team Blue.png",
-    "File:Laser Light Cannon Team Blue.png",
-    "File:Last Bite Team Blue.png",
-    "File:Laticauda's Poison Team Blue.png",
-    "File:Laughing Dragon Team Blue.png",
-    "File:Laughing Skull Team Blue.png",
-    "File:Laughing Stock Team Blue.png",
-    "File:Law of the Land Team Blue.png",
-    "File:Lawbreakers Team Blue.png",
-    "File:Leash of Souls Team Blue.png",
-    "File:Leonardo Team Blue.png",
-    "File:Leonidas Onyx Team Blue.png",
-    "File:Lethal Edge Team Blue.png",
-    "File:Lethal Lute Team Blue.png",
-    "File:Librarian Mirage Team Blue.png",
-    "File:Lichlord Azoth Team Blue.png",
-    "File:Light of Truth Team Blue.png",
-    "File:Lightbringer Team Blue.png",
-    "File:Lighted Eminence Team Blue.png",
-    "File:Lightning Rod Team Blue.png",
-    "File:Lightning Sigil Team Blue.png",
-    "File:Lil' Yumiko Team Blue.png",
-    "File:Lin Fei Team Blue.png",
-    "File:Lion Rampant Roland Team Blue.png",
-    "File:Lion's Pride Team Blue.png",
-    "File:Lion's Reign Team Blue.png",
-    "File:Lionclaw Team Blue.png",
-    "File:Lionguard Diana Team Blue.png",
-    "File:Lionheart Roland Team Blue.png",
-    "File:Live Action Orion Team Blue.png",
-    "File:Loa Bow Team Blue.png",
-    "File:Loathsome Talon Team Blue.png",
-    "File:Lobster Lance Team Blue.png",
-    "File:Loch's Harpoon Team Blue.png",
-    "File:Lockdown Nix Team Blue.png",
-    "File:Locker Boom Team Blue.png",
-    "File:Lockpick Team Blue.png",
-    "File:Lodestone Team Blue.png",
-    "File:Loki Team Blue.png",
-    "File:LOL RIP Team Blue.png",
-    "File:Long Sword Team Blue.png",
-    "File:Long Tooth Team Blue.png",
-    "File:Lookin' Sharp Team Blue.png",
-    "File:Looter's Lute Team Blue.png",
-    "File:Lord Sentinel Team Blue.png",
-    "File:Lord Vraxx Team Blue.png",
-    "File:Lord's Justice Team Blue.png",
-    "File:Los Gatos Voladores Team Blue.png",
-    "File:Los Volcanes Team Blue.png",
-    "File:Lost Technology Team Blue.png",
-    "File:Lost World Petra Team Blue.png",
-    "File:Love Affair Team Blue.png",
-    "File:Love Bug Val Team Blue.png",
-    "File:Love Hurts Team Blue.png",
-    "File:Love Letter Opener Team Blue.png",
-    "File:Love Sick Team Blue.png",
-    "File:Love's Embrace Team Blue.png",
-    "File:Lovelaced Ada Team Blue.png",
-    "File:Loves Me Not Team Blue.png",
-    "File:Loves Me Team Blue.png",
-    "File:Lucien Team Blue.png",
-    "File:Lucille Team Blue.png",
-    "File:Lucky Magi ☆ Sparkling Sword Team Blue.png",
-    "File:Luke Team Blue.png",
-    "File:Luminary Authority Team Blue.png",
-    "File:Luminous Paladin Jaeyun Level 1 Team Blue.png",
-    "File:Luminous Paladin Jaeyun Level 2 Team Blue.png",
-    "File:Luminous Paladin Jaeyun Level 3 Team Blue.png",
-    "File:Lynx Asuri Team Blue.png",
-    "File:M. Bison Team Blue.png",
-    "File:M7 SMG & Plasma Rifle Team Blue.png",
-    "File:Mach 25 Thea Team Blue.png",
-    "File:Macho King Team Blue.png",
-    "File:Macho Man Team Blue.png",
-    "File:Mad Doctor Ulgrim Team Blue.png",
-    "File:Mad Dog Mordex Team Blue.png",
-    "File:Mad Genius Scarlet Team Blue.png",
-    "File:Madame Yumiko Team Blue.png",
-    "File:Maggie Team Blue.png",
-    "File:Maggie's Machete Team Blue.png",
-    "File:Magic Bubble Wand Team Blue.png",
-    "File:Magma Bolt Team Blue.png",
-    "File:Magma Heart Team Blue.png",
-    "File:Magma Spear Team Blue.png",
-    "File:Magni Team Blue.png",
-    "File:Magnum Pistols Team Blue.png",
-    "File:Magpie Munin Team Blue.png",
-    "File:Magyar Team Blue.png",
-    "File:Makin' Bacon Pancakes Team Blue.png",
-    "File:Mako Team Blue.png",
-    "File:Malady Wear Level 1 Team Blue.png",
-    "File:Malady Wear Level 2 Team Blue.png",
-    "File:Malady Wear Level 3 Team Blue.png",
-    "File:Mammoth Galoshes Team Blue.png",
-    "File:Mammothade Cooler Team Blue.png",
-    "File:Manhandle Slam Team Blue.png",
-    "File:Manta Blade Team Blue.png",
-    "File:Maple Breeze Team Blue.png",
-    "File:Marauder Bödvar Team Blue.png",
-    "File:Marigold Maul Team Blue.png",
-    "File:Marks the Spot Team Blue.png",
-    "File:Marrow Team Blue.png",
-    "File:Martelo No Chão Team Blue.png",
-    "File:Martial Blades Team Blue.png",
-    "File:Martial Fists Team Blue.png",
-    "File:Martial Staff Team Blue.png",
-    "File:Masked Hero Cassidy Team Blue.png",
-    "File:Master Blacksmith Ulgrim Team Blue.png",
-    "File:Mastercraft Recurve Team Blue.png",
-    "File:Match Point Roland Team Blue.png",
-    "File:Matchlock Spear Team Blue.png",
-    "File:Matchmaker Vector Team Blue.png",
-    "File:Matsuri Yumiko Team Blue.png",
-    "File:Maxilli-Blasts Team Blue.png",
-    "File:Maître d'Hattori Team Blue.png",
-    "File:Meadowguard Ember Team Blue.png",
-    "File:Mech Makers Team Blue.png",
-    "File:Mecha Asuri Team Blue.png",
-    "File:Mecha Ragnir Team Blue.png",
-    "File:Mecha Teros Team Blue.png",
-    "File:Mega Wrench Team Blue.png",
-    "File:Memento Mori Team Blue.png",
-    "File:Menace Maul Team Blue.png",
-    "File:Mercy Killers Team Blue.png",
-    "File:Merrow Sidra Team Blue.png",
-    "File:Merry Jingle Scythe Team Blue.png",
-    "File:Messatsu Blade Team Blue.png",
-    "File:Metadev Asuri Team Blue.png",
-    "File:Metadev Barraza Team Blue.png",
-    "File:Metadev Brynn Team Blue.png",
-    "File:Metadev Bödvar Team Blue.png",
-    "File:Metadev Ember Team Blue.png",
-    "File:Metadev Fait Team Blue.png",
-    "File:Metadev Orion Team Blue.png",
-    "File:Metadev Teros Team Blue.png",
-    "File:Metadev Val Team Blue.png",
-    "File:Metalbender's Mittens Team Blue.png",
-    "File:Michelangelo Team Blue.png",
-    "File:Michonne Team Blue.png",
-    "File:Michonne's Katana Team Blue.png",
-    "File:Mikimoto Katana Team Blue.png",
-    "File:Mirage Incarnate Team Blue.png",
-    "File:Mirage Team Blue.png",
-    "File:Mirage the Cleaner Team Blue.png",
-    "File:Mississippi Wrangler Team Blue.png",
-    "File:Mizzenmast Team Blue.png",
-    "File:Mjölnir Team Blue.png",
-    "File:MK Needles Team Blue.png",
-    "File:Mk V Lance Team Blue.png",
-    "File:Mk1 Cannon Team Blue.png",
-    "File:Modern Thunder Team Blue.png",
-    "File:Modi Team Blue.png",
-    "File:Modular Rift Ember Team Blue.png",
-    "File:Mogar Team Blue.png",
-    "File:Molten Kor Team Blue.png",
-    "File:Monofilament Blade Team Blue.png",
-    "File:Monstrous Aura Team Blue.png",
-    "File:Moonbeam Blade Team Blue.png",
-    "File:Moonbeam Team Blue.png",
-    "File:Moongleam Bow Team Blue.png",
-    "File:Moonlight Meteor Team Blue.png",
-    "File:Moonstone Spear Team Blue.png",
-    "File:Mordex Team Blue.png",
-    "File:Morning Maul Team Blue.png",
-    "File:Morning Star Team Blue.png",
-    "File:Mortal Coil Team Blue.png",
-    "File:Mosaic Maul Team Blue.png",
-    "File:Moskitoes Team Blue.png",
-    "File:Mother of Pearl Blasters Team Blue.png",
-    "File:Mouse Trap Team Blue.png",
-    "File:MP7s Team Blue.png",
-    "File:Mr. Stabby Team Blue.png",
-    "File:Mudras Team Blue.png",
-    "File:Muerto Azoth Team Blue.png",
-    "File:Munin Team Blue.png",
-    "File:Murder of Crows Team Blue.png",
-    "File:Museum-Quality Spear Team Blue.png",
-    "File:Mythic Hero Val Team Blue.png",
-    "File:Nanometal Spear Team Blue.png",
-    "File:Naptime Team Blue.png",
-    "File:Naughty & Nice Team Blue.png",
-    "File:Necromancer Azoth Team Blue.png",
-    "File:Necromantic Aura Team Blue.png",
-    "File:Needle Drop Spear Team Blue.png",
-    "File:Needlers Team Blue.png",
-    "File:Negan Team Blue.png",
-    "File:Nemesis Barraza Team Blue.png",
-    "File:Neon Gleam Team Blue.png",
-    "File:Neostreet Hattori Team Blue.png",
-    "File:Net Guns Team Blue.png",
-    "File:Netherworld Artemis Team Blue.png",
-    "File:Nettle & Belladonna Team Blue.png",
-    "File:Neutron Maul Team Blue.png",
-    "File:Nevermore Team Blue.png",
-    "File:New Best Friend Team Blue.png",
-    "File:New School Jhala Team Blue.png",
-    "File:New West Cassidy Team Blue.png",
-    "File:Nidhogg Nai Team Blue.png",
-    "File:Night Blight Team Blue.png",
-    "File:Night Terrors Team Blue.png",
-    "File:Nightblade Hattori Team Blue.png",
-    "File:Nightcap Caspian Team Blue.png",
-    "File:Nightfall Team Blue.png",
-    "File:Nightlapse Team Blue.png",
-    "File:Nightmare Bow Team Blue.png",
-    "File:Nightmare Butcher Team Blue.png",
-    "File:Nightmare Claws Team Blue.png",
-    "File:Nightmare Eye Team Blue.png",
-    "File:Nightmare Hatchet Team Blue.png",
-    "File:Nightmare Knuckles Team Blue.png",
-    "File:Nightmare Launcher Team Blue.png",
-    "File:Nightmare Mandible Team Blue.png",
-    "File:Nightmare Mauler Team Blue.png",
-    "File:Nightmare Reaper Team Blue.png",
-    "File:Nightmare Slicers Team Blue.png",
-    "File:Nightmare Spine Team Blue.png",
-    "File:Nightmare Sword Team Blue.png",
-    "File:Nightmare Talons Team Blue.png",
-    "File:Nightmare Team Blue.png",
-    "File:Nightmare Witnesses Team Blue.png",
-    "File:Nightshade Ember Team Blue.png",
-    "File:Nightshade Ragnir Team Blue.png",
-    "File:Nightwatch Sentinel Team Blue.png",
-    "File:Nimue Team Blue.png",
-    "File:Nina Williams Team Blue.png",
-    "File:Nina's Blasters Team Blue.png",
-    "File:Nina's Daggers Team Blue.png",
-    "File:Ninetails Team Blue.png",
-    "File:Nix Couture Team Blue.png",
-    "File:Nix Team Blue.png",
-    "File:No Contest Team Blue.png",
-    "File:No One is Ready Team Blue.png",
-    "File:No Running! Team Blue.png",
-    "File:North Wind Mordex Team Blue.png",
-    "File:Nothing Up My Sleeve Team Blue.png",
-    "File:Null Pointer Team Blue.png",
-    "File:Number 1 Fan Team Blue.png",
-    "File:Numbskull Team Blue.png",
-    "File:Numeric Flux Team Blue.png",
-    "File:Nunchaku Team Blue.png",
-    "File:Nutcracker Bödvar Team Blue.png",
-    "File:Nutcracker Cassidy Team Blue.png",
-    "File:Nutcracker Val Team Blue.png",
-    "File:Nutsy Team Blue.png",
-    "File:Oath of Service Team Blue.png",
-    "File:Obake Petra Level 1 Team Blue.png",
-    "File:Obake Petra Level 2 Team Blue.png",
-    "File:Obake Petra Level 3 Team Blue.png",
-    "File:Obi-Wan Kenobi Team Blue.png",
-    "File:Ocelotl Tezca Team Blue.png",
-    "File:Octavius Mordex Level 1 Team Blue.png",
-    "File:Octavius Mordex Level 2 Team Blue.png",
-    "File:Octavius Mordex Level 3 Team Blue.png",
-    "File:Oddball Team Blue.png",
-    "File:Odin's Spear Team Blue.png",
-    "File:Oendan Jiro Team Blue.png",
-    "File:Offworld Team Blue.png",
-    "File:OHHHHH YEEAAAH! Team Blue.png",
-    "File:Ojiisan Koji Team Blue.png",
-    "File:Ol' Faithful Team Blue.png",
-    "File:Old School Spear Team Blue.png",
-    "File:Olive Stompers Team Blue.png",
-    "File:Oni Bite Team Blue.png",
-    "File:Oni no Hattori Team Blue.png",
-    "File:Oni Spear Team Blue.png",
-    "File:Onihashi Steel Blade Team Blue.png",
-    "File:Onyx Team Blue.png",
-    "File:Opal's Bow Team Blue.png",
-    "File:Optimized Odzutsu Team Blue.png",
-    "File:Orb of Mercy Team Blue.png",
-    "File:Orbot Team Blue.png",
-    "File:Orc Raider Jhala Team Blue.png",
-    "File:Orchard Barrel Team Blue.png",
-    "File:Origin Axe Team Blue.png",
-    "File:Orion For Hire Team Blue.png",
-    "File:Orion Prime Team Blue.png",
-    "File:Orion Team Blue.png",
-    "File:Orma Team Blue.png",
-    "File:Ornate Anchor Team Blue.png",
-    "File:Ornate Scissorblade Team Blue.png",
-    "File:Outback Gnash Team Blue.png",
-    "File:Outerworld Zariel Team Blue.png",
-    "File:Outlaw Loki Team Blue.png",
-    "File:Outrun Team Blue.png",
-    "File:Overdrive Lucien Team Blue.png",
-    "File:Overhand Slicers Team Blue.png",
-    "File:Owl Bard Hugin Team Blue.png",
-    "File:Owl's Flight Team Blue.png",
-    "File:Paci-fists Team Blue.png",
-    "File:Packbane Team Blue.png",
-    "File:Painkiller Team Blue.png",
-    "File:Palette Knife Team Blue.png",
-    "File:Palette Team Blue.png",
-    "File:Panic Maker Team Blue.png",
-    "File:Parasol Pike Team Blue.png",
-    "File:Paring Knife Team Blue.png",
-    "File:Particle Blade Team Blue.png",
-    "File:Password Crackers Team Blue.png",
-    "File:Patadas Voladoras Team Blue.png",
-    "File:Patrick Star Team Blue.png",
-    "File:Pavo Beak Team Blue.png",
-    "File:Pavonini Talon Team Blue.png",
-    "File:Payday Team Blue.png",
-    "File:Peacock Artemis Team Blue.png",
-    "File:Pearl Team Blue.png",
-    "File:Pearl's Spear Team Blue.png",
-    "File:PegaSwift Runners Team Blue.png",
-    "File:Penguin's Pummel Team Blue.png",
-    "File:Penumbral Crescent Team Blue.png",
-    "File:People's Elbow Team Blue.png",
-    "File:Peppermint Piercer Team Blue.png",
-    "File:Perceptive Flight Team Blue.png",
-    "File:Perfect Wu Shang Team Blue.png",
-    "File:Permafrost Team Blue.png",
-    "File:Petra Reanimated Team Blue.png",
-    "File:Petra Team Blue.png",
-    "File:Pew Pew Team Blue.png",
-    "File:Phantom Fists Team Blue.png",
-    "File:Phantom of the Armor Magyar Team Blue.png",
-    "File:Phantom Toxin Team Blue.png",
-    "File:Pharaoh King Magyar Team Blue.png",
-    "File:Phoenix Claw Team Blue.png",
-    "File:Phoenix Wings Team Blue.png",
-    "File:Photon Sphere Team Blue.png",
-    "File:Photosynthesis Warhammer Team Blue.png",
-    "File:Piece of Eden Team Blue.png",
-    "File:Piercing Petals Team Blue.png",
-    "File:Piercing Poison Team Blue.png",
-    "File:Piercing Regret Team Blue.png",
-    "File:Pig Sticker Team Blue.png",
-    "File:Pike of the Forgotten Team Blue.png",
-    "File:Piledriver Team Blue.png",
-    "File:Pillage and Plunder Team Blue.png",
-    "File:Pillar of the Heavens Team Blue.png",
-    "File:Pincer Pike Team Blue.png",
-    "File:Pirate Queen Sidra Team Blue.png",
-    "File:Pizza Punchers Team Blue.png",
-    "File:Piña Collider Team Blue.png",
-    "File:Plague Boost Team Blue.png",
-    "File:Plague Doctor Lucien Team Blue.png",
-    "File:Plague Knight Team Blue.png",
-    "File:Planet Destroyer Team Blue.png",
-    "File:Plasma Cannon Team Blue.png",
-    "File:Plasma Cleaver Team Blue.png",
-    "File:Plastic Pike Team Blue.png",
-    "File:Platinum Pike Team Blue.png",
-    "File:Pledge & Pride Team Blue.png",
-    "File:Plutonium Pike Team Blue.png",
-    "File:Pneumatic Hammer Team Blue.png",
-    "File:Po Team Blue.png",
-    "File:Pocket Aces Team Blue.png",
-    "File:Poison Dart Team Blue.png",
-    "File:Polar Poleax Team Blue.png",
-    "File:Pole Position Team Blue.png",
-    "File:Pool Party Diana Team Blue.png",
-    "File:Poseidon Thatch Team Blue.png",
-    "File:Poseidon's Gift Team Blue.png",
-    "File:Power Flash Team Blue.png",
-    "File:Power of Courage Team Blue.png",
-    "File:Power of Will Team Blue.png",
-    "File:Power Sword Team Blue.png",
-    "File:Powerplay Blasters Team Blue.png",
-    "File:Powersurge Team Blue.png",
-    "File:Precision Team Blue.png",
-    "File:President Sentinel Team Blue.png",
-    "File:Pressure Slicer Team Blue.png",
-    "File:Prey Catcher Team Blue.png",
-    "File:Prickly Cut Team Blue.png",
-    "File:Prideful Roar Team Blue.png",
-    "File:Primordial Punch-Out Team Blue.png",
-    "File:Primrose Mallet Team Blue.png",
-    "File:Princess Bubblegum Team Blue.png",
-    "File:Pristine Cutlass Team Blue.png",
-    "File:Prizefighter Cross Team Blue.png",
-    "File:Prizewinner Team Blue.png",
-    "File:Pro-Tour Racket Team Blue.png",
-    "File:Professor Vraxx Team Blue.png",
-    "File:Project-0NYX Team Blue.png",
-    "File:Prophecy Team Blue.png",
-    "File:Protect & Serve Team Blue.png",
-    "File:Psychlops Team Blue.png",
-    "File:Psycho Power Aura Team Blue.png",
-    "File:Pteranodon Gnash Team Blue.png",
-    "File:Puella Papilio Scarlet Team Blue.png",
-    "File:Pulaski Pike Team Blue.png",
-    "File:Pulsing Thicket Team Blue.png",
-    "File:Punch-a-tron 5000s Team Blue.png",
-    "File:Punkin Spice Yumiko Team Blue.png",
-    "File:Purge and Exorcise Team Blue.png",
-    "File:Pyrois Blast Team Blue.png",
-    "File:Qiang Team Blue.png",
-    "File:Quarrion Sickle Team Blue.png",
-    "File:Quasar Level 1 Team Blue.png",
-    "File:Quasar Level 2 Team Blue.png",
-    "File:Quasar Level 3 Team Blue.png",
-    "File:Queen Beat Sidra Team Blue.png",
-    "File:Queen Nai Team Blue.png",
-    "File:Queen of Demons Team Blue.png",
-    "File:Queen of Scales Jhala Team Blue.png",
-    "File:Quill of Thoth Team Blue.png",
-    "File:Rabbid Boppers Team Blue.png",
-    "File:Racing Lance Team Blue.png",
-    "File:Radiant Ember Team Blue.png",
-    "File:Raging Fists Team Blue.png",
-    "File:Raging Furnace Team Blue.png",
-    "File:Ragnir Team Blue.png",
-    "File:Ragnir the Covetous Team Blue.png",
-    "File:Ragnirsaurus Rex Team Blue.png",
-    "File:Rail Hammer Team Blue.png",
-    "File:Railgun Team Blue.png",
-    "File:Rain of Fire Team Blue.png",
-    "File:Rank Breaker Team Blue.png",
-    "File:Ranked Ladder Team Blue.png",
-    "File:Ranno Wu Shang Team Blue.png",
-    "File:Raphael Team Blue.png",
-    "File:Raptor, the Betrayer Team Blue.png",
-    "File:Rapture Team Blue.png",
-    "File:Raven Claws Team Blue.png",
-    "File:Raven Rogue Lucien Team Blue.png",
-    "File:Raven Shaman Dusk Team Blue.png",
-    "File:Raven's Talon Team Blue.png",
-    "File:Ray of the Dead Team Blue.png",
-    "File:Raycasters Team Blue.png",
-    "File:Raydvar Team Blue.png",
-    "File:Rayman Team Blue.png",
-    "File:Raymesis Team Blue.png",
-    "File:Razor's Reach Team Blue.png",
-    "File:Razorback Barraza Team Blue.png",
-    "File:Reactor Core Team Blue.png",
-    "File:Ready to Riot Teros Team Blue.png",
-    "File:Realm Etchers Team Blue.png",
-    "File:Reaping Time Team Blue.png",
-    "File:Recurve Bow Team Blue.png",
-    "File:Red Raptor Team Blue.png",
-    "File:Red Romance Volkov Team Blue.png",
-    "File:Red Rose Kaya Team Blue.png",
-    "File:Red-Hot Ranseur Team Blue.png",
-    "File:Refractors Team Blue.png",
-    "File:Regal Sun Sword Team Blue.png",
-    "File:Regifted Spear Team Blue.png",
-    "File:Regulus Team Blue.png",
-    "File:Reindeer Games Gnash Team Blue.png",
-    "File:Relentless Pest Reno Team Blue.png",
-    "File:Remnant of Fate Team Blue.png",
-    "File:Rending Talons Team Blue.png",
-    "File:Reno Team Blue.png",
-    "File:Repeating Crossbows Team Blue.png",
-    "File:Republic General's Gauntlets Team Blue.png",
-    "File:Resonators Team Blue.png",
-    "File:Retro Reaper Nix Team Blue.png",
-    "File:Retrograde Rocket Team Blue.png",
-    "File:Reunited Team Blue.png",
-    "File:Revelations Ezio Team Blue.png",
-    "File:Revolver Cannon Team Blue.png",
-    "File:Revolvers Team Blue.png",
-    "File:Revolving Blades Team Blue.png",
-    "File:RGB Axe Team Blue.png",
-    "File:RGB Blasters Team Blue.png",
-    "File:RGB Boots Team Blue.png",
-    "File:RGB Bow Team Blue.png",
-    "File:RGB Cannon Team Blue.png",
-    "File:RGB Gauntlets Team Blue.png",
-    "File:RGB Greatsword Team Blue.png",
-    "File:RGB Hammer Team Blue.png",
-    "File:RGB Katars Team Blue.png",
-    "File:RGB Orb Team Blue.png",
-    "File:RGB Rocket Lance Team Blue.png",
-    "File:RGB Scythe Team Blue.png",
-    "File:RGB Spear Team Blue.png",
-    "File:RGB Sword Team Blue.png",
-    "File:Rhapsody's Edge Team Blue.png",
-    "File:Rib Ticklers Team Blue.png",
-    "File:Rick Team Blue.png",
-    "File:Rick's Hatchet Team Blue.png",
-    "File:Riddle of Strength Team Blue.png",
-    "File:Rift Dweller Teros Team Blue.png",
-    "File:Righteous Indignation Team Blue.png",
-    "File:Righteous Spine Team Blue.png",
-    "File:Righter of Wrongs Team Blue.png",
-    "File:Rippers Team Blue.png",
-    "File:Ripple and Wave Team Blue.png",
-    "File:Riptide Petra Team Blue.png",
-    "File:Rising Glory Team Blue.png",
-    "File:Ritual Blade Team Blue.png",
-    "File:Ritzy Bödvar Team Blue.png",
-    "File:Roar & Pounce Team Blue.png",
-    "File:Roar of the Pride Team Blue.png",
-    "File:Rocker Volkov Team Blue.png",
-    "File:Rocket Lance of Mercy Team Blue.png",
-    "File:Rocket Parasol Team Blue.png",
-    "File:Rocket Powered Warhorse Team Blue.png",
-    "File:Rocket Raptor Team Blue.png",
-    "File:Rogue Queen Arcadia Team Blue.png",
-    "File:Roland the Hooded Team Blue.png",
-    "File:Roland the Victorious Team Blue.png",
-    "File:Roman Reigns Team Blue.png",
-    "File:Ronin Koji Team Blue.png",
-    "File:Root of the Forest Team Blue.png",
-    "File:Rose Gold Revolvers Team Blue.png",
-    "File:Rosewood Spear Team Blue.png",
-    "File:Rotten Oar Team Blue.png",
-    "File:Royal Allegiance Team Blue.png",
-    "File:Royal Crescent Team Blue.png",
-    "File:Royal Decree Team Blue.png",
-    "File:Royal Family Team Blue.png",
-    "File:Royal Roar Team Blue.png",
-    "File:Royal Spoils Team Blue.png",
-    "File:Royal Sword Team Blue.png",
-    "File:Royal Warrior Thor Team Blue.png",
-    "File:Runewood Bow Team Blue.png",
-    "File:Runtime Team Blue.png",
-    "File:Rust Team Blue.png",
-    "File:Ryu Team Blue.png",
-    "File:Saber of Order Team Blue.png",
-    "File:Sacred Blades Team Blue.png",
-    "File:Sacred Orders Team Blue.png",
-    "File:Sacred Relic Team Blue.png",
-    "File:Sagittarius Crescent Team Blue.png",
-    "File:Saint Nicks Team Blue.png",
-    "File:Saints & Souls Team Blue.png",
-    "File:Sakura Strike Team Blue.png",
-    "File:Sakura Strikers Team Blue.png",
-    "File:Sakura Team Blue.png",
-    "File:Saltwater Saber Team Blue.png",
-    "File:Salty Shooters Team Blue.png",
-    "File:Salvaged Yari Team Blue.png",
-    "File:Samaritans Team Blue.png",
-    "File:Sandy Cheeks Team Blue.png",
-    "File:Sanguine Flight Team Blue.png",
-    "File:Santa Wu Shang Team Blue.png",
-    "File:Santa's Sleigh-er Team Blue.png",
-    "File:Sattelite Smash Team Blue.png",
-    "File:Sawbones Team Blue.png",
-    "File:Sawed-Off Barraza Team Blue.png",
-    "File:Scarabs' Bane Team Blue.png",
-    "File:Scare-Ware Team Blue.png",
-    "File:Scarecrow Nix Team Blue.png",
-    "File:Scarlet Team Blue.png",
-    "File:Scavenger's Spoils Team Blue.png",
-    "File:Scepter of Salt Team Blue.png",
-    "File:Scintilating Spear Team Blue.png",
-    "File:Scrapped M.O.U.S.E.R. Team Blue.png",
-    "File:Scrapshard Team Blue.png",
-    "File:Scrimshaw Harpoon Team Blue.png",
-    "File:Scrying Glass Team Blue.png",
-    "File:Scythe of Mercy Team Blue.png",
-    "File:Scythe of the Sands Team Blue.png",
-    "File:Scythe of Torment Team Blue.png",
-    "File:Sea Krait Nai Team Blue.png",
-    "File:Seal Breaker Team Blue.png",
-    "File:Sealed Infernum Team Blue.png",
-    "File:Searing Blade Team Blue.png",
-    "File:Searing Sphere Team Blue.png",
-    "File:Season's Beatings Team Blue.png",
-    "File:Secret Admirer Zariel Team Blue.png",
-    "File:Secret Santa Thatch Team Blue.png",
-    "File:Section Zero Isaiah Team Blue.png",
-    "File:Security Measure Team Blue.png",
-    "File:Seeker Wu Shang Team Blue.png",
-    "File:Sekai no Kana Team Blue.png",
-    "File:Selena's Smasher Team Blue.png",
-    "File:Selenite Jet Lance Team Blue.png",
-    "File:Selenite Ray Guns Team Blue.png",
-    "File:Sentinel Team Blue.png",
-    "File:Serape Kid Cassidy Team Blue.png",
-    "File:Seraph Artemis Team Blue.png",
-    "File:Seraph's Message Team Blue.png",
-    "File:Seridashi Team Blue.png",
-    "File:Serisage Team Blue.png",
-    "File:Serpent Spear Team Blue.png",
-    "File:Serpent's Fangs Level 1 Team Blue.png",
-    "File:Serpent's Fangs Level 2 Team Blue.png",
-    "File:Serpent's Fangs Level 3 Team Blue.png",
-    "File:Serve & Protect Team Blue.png",
-    "File:Seven Secrets Spear Team Blue.png",
-    "File:Seven Team Blue.png",
-    "File:Shadaloo Scepter Team Blue.png",
-    "File:Shadow Casters Team Blue.png",
-    "File:Shadow Edge Team Blue.png",
-    "File:Shadow Ops Isaiah Team Blue.png",
-    "File:Shadow Spear Team Blue.png",
-    "File:Shadow Trawl Team Blue.png",
-    "File:Shadowbolt Team Blue.png",
-    "File:Shadowlord Cross Team Blue.png",
-    "File:Shadowstalker Diana Team Blue.png",
-    "File:Shark Attack Thatch Team Blue.png",
-    "File:Shark Heart Barraza Team Blue.png",
-    "File:Sharkbite Team Blue.png",
-    "File:Sharkshooters Team Blue.png",
-    "File:Sharktooth Grin Team Blue.png",
-    "File:Shibuya Recurve Team Blue.png",
-    "File:Shieldmaiden Brynn Team Blue.png",
-    "File:Shin Sekai Koji Team Blue.png",
-    "File:Shinigami Jiro Team Blue.png",
-    "File:Shinobi Sword Team Blue.png",
-    "File:Shock Katars Team Blue.png",
-    "File:Shogun Jiro Team Blue.png",
-    "File:Shogun Koji Team Blue.png",
-    "File:Shooting Star Team Blue.png",
-    "File:Shot Caller Team Blue.png",
-    "File:Shovel Blade Team Blue.png",
-    "File:Shovel Knight Team Blue.png",
-    "File:Showman's Daggers Team Blue.png",
-    "File:Shredder Team Blue.png",
-    "File:Shriek & Wail Team Blue.png",
-    "File:Shrouded Blade Team Blue.png",
-    "File:Sidearms Team Blue.png",
-    "File:Sidekick Souvenir Orb Team Blue.png",
-    "File:Sidewinder Hattori Team Blue.png",
-    "File:Sidewinder Team Blue.png",
-    "File:Sidra Team Blue.png",
-    "File:Signal Flares Team Blue.png",
-    "File:Silenced Pistols Team Blue.png",
-    "File:Silent Night Team Blue.png",
-    "File:Silent Wings Team Blue.png",
-    "File:Silver Age Jhala Team Blue.png",
-    "File:Silver and Steel Team Blue.png",
-    "File:Silver Bullets Team Blue.png",
-    "File:Silver Naginata Team Blue.png",
-    "File:Silver Sixshooters Team Blue.png",
-    "File:Silver Sledgehammer Team Blue.png",
-    "File:Silvermane Gnash Team Blue.png",
-    "File:Simon Belmont Team Blue.png",
-    "File:Singularity Sickle Team Blue.png",
-    "File:Sinister Strike Team Blue.png",
-    "File:Sir Rayelot Team Blue.png",
-    "File:Sir Roland Team Blue.png",
-    "File:Six of a Kind Team Blue.png",
-    "File:Six String Team Blue.png",
-    "File:Sixshooters Team Blue.png",
-    "File:Skadi's Bow Team Blue.png",
-    "File:Skel-asuri Team Blue.png",
-    "File:Ski Pole Team Blue.png",
-    "File:Skull of the Saint Team Blue.png",
-    "File:Skull Saw Team Blue.png",
-    "File:Skullcracker Team Blue.png",
-    "File:Sky Captain Scarlet Team Blue.png",
-    "File:Sky Piercer Team Blue.png",
-    "File:Sky Pirate Sidra Team Blue.png",
-    "File:Sky Scourge Azoth Team Blue.png",
-    "File:Sky Scourge Jhala Team Blue.png",
-    "File:Skybound Team Blue.png",
-    "File:Skyrush Team Blue.png",
-    "File:Skysworn Oath Team Blue.png",
-    "File:Slapshot Artemis Team Blue.png",
-    "File:Slasher Barraza Team Blue.png",
-    "File:Sledge Fire Team Blue.png",
-    "File:Sledge Hammer Team Blue.png",
-    "File:Sleeping Demon Team Blue.png",
-    "File:Sleight of Hand Team Blue.png",
-    "File:Smasher Team Blue.png",
-    "File:Smokers Mk. B Team Blue.png",
-    "File:Smoldering Skewers Team Blue.png",
-    "File:Smooth Waves Team Blue.png",
-    "File:Snake Charmer Nai Team Blue.png",
-    "File:Snake Eyes (Thatch Skin) Team Blue.png",
-    "File:Snake Eyes (Weapon Skin) Team Blue.png",
-    "File:Snake Goddess Nai Team Blue.png",
-    "File:Snarler Team Blue.png",
-    "File:Snow Globe Team Blue.png",
-    "File:Snow Shooters Team Blue.png",
-    "File:Snow Shovel Axe Team Blue.png",
-    "File:Snow Stalker Kaya Team Blue.png",
-    "File:Snowdrift Jaeyun Team Blue.png",
-    "File:Snowman Kor Team Blue.png",
-    "File:Snowsmoke Team Blue.png",
-    "File:Sobek Ragnir Team Blue.png",
-    "File:Sol Smasher Team Blue.png",
-    "File:Sol Spear Team Blue.png",
-    "File:Solar Flares Team Blue.png",
-    "File:Soldier's Duty Team Blue.png",
-    "File:Sonar Slicers Team Blue.png",
-    "File:Sonic Boom Team Blue.png",
-    "File:Soul Battery Team Blue.png",
-    "File:Soul Blasters Team Blue.png",
-    "File:Soul Cleaver Team Blue.png",
-    "File:Soul Dancer Team Blue.png",
-    "File:Soul Fangs Team Blue.png",
-    "File:Soul of Aoku Team Blue.png",
-    "File:Soul Render Team Blue.png",
-    "File:Soul Scourge Team Blue.png",
-    "File:Soul Seeker Team Blue.png",
-    "File:Soulbane Team Blue.png",
-    "File:Soulbinder Team Blue.png",
-    "File:Soulbound Diana Team Blue.png",
-    "File:Soulbound Onyx Team Blue.png",
-    "File:Soulflame Team Blue.png",
-    "File:Soulmate Azoth Team Blue.png",
-    "File:Soulshard Team Blue.png",
-    "File:Sourcecode Petra Team Blue.png",
-    "File:Space Dogfighter Vraxx Team Blue.png",
-    "File:Space Race Cassidy Team Blue.png",
-    "File:Space Shooters Team Blue.png",
-    "File:Spark Compressor Team Blue.png",
-    "File:Spark of Madness Team Blue.png",
-    "File:Sparring Gloves Team Blue.png",
-    "File:Speaker of the Sea Team Blue.png",
-    "File:Spear of Mercy Team Blue.png",
-    "File:Spear of the Future Team Blue.png",
-    "File:Spear of the Living Team Blue.png",
-    "File:Spear of the Nile Team Blue.png",
-    "File:Spear of Wisdom Team Blue.png",
-    "File:Spec-Ops Lucien Team Blue.png",
-    "File:Special Forces Pistols Team Blue.png",
-    "File:Special Forces Team Blue.png",
-    "File:Specter Knight Team Blue.png",
-    "File:Specter Spear Team Blue.png",
-    "File:Speedmetal Jhala Team Blue.png",
-    "File:Spellbreaker Diana Team Blue.png",
-    "File:Spinal Sickle Team Blue.png",
-    "File:Spine-Chilling Fists Team Blue.png",
-    "File:Spirit Ash's Fangs Team Blue.png",
-    "File:Spirit Breakers Team Blue.png",
-    "File:Spirit's Passing Team Blue.png",
-    "File:Spitebringer Team Blue.png",
-    "File:Spiteful Scepter Team Blue.png",
-    "File:Splish & Splash Team Blue.png",
-    "File:Splish Splash Team Blue.png",
-    "File:Splitter Team Blue.png",
-    "File:SPNKr Rocket Launcher Team Blue.png",
-    "File:SpongeBob SquarePants Team Blue.png",
-    "File:Spring Breeze Team Blue.png",
-    "File:Spring Cleaning Team Blue.png",
-    "File:Squadron Strikers Team Blue.png",
-    "File:Squidward's Clarinet Team Blue.png",
-    "File:Staff Sgt. Cross Team Blue.png",
-    "File:Stained Shards Team Blue.png",
-    "File:Stake Driver Team Blue.png",
-    "File:Stalwart Screech Team Blue.png",
-    "File:Standard Issue Team Blue.png",
-    "File:Star Commander Fait Team Blue.png",
-    "File:Star Guardian Ember Team Blue.png",
-    "File:Star Merc Val Team Blue.png",
-    "File:Star Miner Ulgrim Team Blue.png",
-    "File:Star Render Team Blue.png",
-    "File:Stardrive Team Blue.png",
-    "File:Starfall Team Blue.png",
-    "File:Starforged Scimitar Team Blue.png",
-    "File:Starforged Spear Team Blue.png",
-    "File:Stargleam Scythe Team Blue.png",
-    "File:Starlet Munin Team Blue.png",
-    "File:Starry Scythe Team Blue.png",
-    "File:Starship Slice Team Blue.png",
-    "File:Starved Scavengers Team Blue.png",
-    "File:Stealthy Steps Team Blue.png",
-    "File:Steam Faction Scarlet Team Blue.png",
-    "File:Steam Rocket Team Blue.png",
-    "File:Steam Sentry Scarlet Team Blue.png",
-    "File:Steam Tank Scarlet Team Blue.png",
-    "File:Steam-Charged Saber Team Blue.png",
-    "File:Steamsmith Scarlet Team Blue.png",
-    "File:Stellar Nova Team Blue.png",
-    "File:Sterling Sledge Team Blue.png",
-    "File:Steven's Shields Team Blue.png",
-    "File:Stevonnie Team Blue.png",
-    "File:Stone of Malice Team Blue.png",
-    "File:Storm Shadow Team Blue.png",
-    "File:Stormlord Ada Team Blue.png",
-    "File:Stormsteel Sentinel Team Blue.png",
-    "File:Street Race Artemis Team Blue.png",
-    "File:Street Samurai Koji Team Blue.png",
-    "File:Street Sovereign Petra Team Blue.png",
-    "File:Streetwear Vivi Team Blue.png",
-    "File:Strike of the Wise Team Blue.png",
-    "File:Stringed Scavenger Team Blue.png",
-    "File:Stryge Team Blue.png",
-    "File:Stuffing Spear Team Blue.png",
-    "File:Sucker Punch Team Blue.png",
-    "File:Suitor Lucien Team Blue.png",
-    "File:Summer Soaker Team Blue.png",
-    "File:Sunforged Spear Team Blue.png",
-    "File:Sunset Axe Team Blue.png",
-    "File:Supreme Ruler Vraxx Team Blue.png",
-    "File:Surprise! Team Blue.png",
-    "File:Surt's Arrow Team Blue.png",
-    "File:Survivor Diana Team Blue.png",
-    "File:Survivor Lara Croft Team Blue.png",
-    "File:Svartalfheim's Caverns Team Blue.png",
-    "File:Swamp Serum Team Blue.png",
-    "File:Swanky Diana Team Blue.png",
-    "File:Swashbuckler Asuri Team Blue.png",
-    "File:Sweet Magi ☆ Dream Spear Team Blue.png",
-    "File:Swim Team Mako Team Blue.png",
-    "File:Switchblade Team Blue.png",
-    "File:Switchcomb Team Blue.png",
-    "File:Sword Breaker Team Blue.png",
-    "File:Sword of Davey Jones Team Blue.png",
-    "File:Sword of Freyr Team Blue.png",
-    "File:Sword of Heroes Team Blue.png",
-    "File:Sword of Justice Team Blue.png",
-    "File:Sword of Mercy Team Blue.png",
-    "File:Sword of Swords Team Blue.png",
-    "File:Sword of the Creed Team Blue.png",
-    "File:Sword of the Demon Team Blue.png",
-    "File:Sword of the Raven Team Blue.png",
-    "File:Sword of Truth Team Blue.png",
-    "File:Sylvan Cleric Kaya Team Blue.png",
-    "File:Symphonic Surge Team Blue.png",
-    "File:Synthetic Charge Team Blue.png",
-    "File:Tactical Blade Team Blue.png",
-    "File:Tactical Cannon Team Blue.png",
-    "File:Tactical Edge Team Blue.png",
-    "File:Tactical Pistols Team Blue.png",
-    "File:Tactical Recurve Team Blue.png",
-    "File:Tactical Sidearms Team Blue.png",
-    "File:Tai Lung Team Blue.png",
-    "File:Talk of the Town Tezca Team Blue.png",
-    "File:Talon's Edge Team Blue.png",
-    "File:Tamed Beast Team Blue.png",
-    "File:Task Force Isaiah Team Blue.png",
-    "File:Taurus Skulls Team Blue.png",
-    "File:Tea-KO Team Blue.png",
-    "File:Teacher's Pets Team Blue.png",
-    "File:Team Spirit Gnash Team Blue.png",
-    "File:Teatime Scarlet Team Blue.png",
-    "File:Technomancer Ada Team Blue.png",
-    "File:Teeth of the Nile Team Blue.png",
-    "File:Teeth-Grinder Team Blue.png",
-    "File:Tempo and Groove Team Blue.png",
-    "File:Tempo Lock Team Blue.png",
-    "File:Tengu Koji Team Blue.png",
-    "File:Termidex Team Blue.png",
-    "File:Termin-gator Onyx Team Blue.png",
-    "File:Teros Team Blue.png",
-    "File:Terra Firma Team Blue.png",
-    "File:Terror-Watt Xull Team Blue.png",
-    "File:Terrorbyte Team Blue.png",
-    "File:Tethered Plane Team Blue.png",
-    "File:Tetramand Beatdown Team Blue.png",
-    "File:Tezca Team Blue.png",
-    "File:That's A Hammer Team Blue.png",
-    "File:Thatch Team Blue.png",
-    "File:The Abyss Team Blue.png",
-    "File:The Albatross Team Blue.png",
-    "File:The Allthorn Team Blue.png",
-    "File:The Angel Team Blue.png",
-    "File:The Appointment Team Blue.png",
-    "File:The Arbiter Team Blue.png",
-    "File:The Axe Team Blue.png",
-    "File:The Berserker Team Blue.png",
-    "File:The Big Bang Team Blue.png",
-    "File:The Blackhearts Team Blue.png",
-    "File:The Bolt Team Blue.png",
-    "File:The Boulders Team Blue.png",
-    "File:The Breakdown Team Blue.png",
-    "File:The Broken Forge Team Blue.png",
-    "File:The Captain Team Blue.png",
-    "File:The Chainsaw Team Blue.png",
-    "File:The Claymores Team Blue.png",
-    "File:The Cleaner Team Blue.png",
-    "File:The Closer Team Blue.png",
-    "File:The Conch Team Blue.png",
-    "File:The Consequences Team Blue.png",
-    "File:The Cure Seeker Team Blue.png",
-    "File:The Dark Cauldron Team Blue.png",
-    "File:The Devourers Team Blue.png",
-    "File:The Doctor's Orders Team Blue.png",
-    "File:The Don Team Blue.png",
-    "File:The Final Gift Team Blue.png",
-    "File:The Finisher Team Blue.png",
-    "File:The Frozen Cutlass Team Blue.png",
-    "File:The Frozen Edge Team Blue.png",
-    "File:The Furnace Team Blue.png",
-    "File:The Giver's Grasp Team Blue.png",
-    "File:The Gladius Team Blue.png",
-    "File:The Grips Team Blue.png",
-    "File:The Harvester Team Blue.png",
-    "File:The Hayrider Team Blue.png",
-    "File:The Heavyweights Team Blue.png",
-    "File:The Herald Team Blue.png",
-    "File:The Hibernator Team Blue.png",
-    "File:The Honorable Sir Roland, Esq. Team Blue.png",
-    "File:The Hunters Team Blue.png",
-    "File:The Insignia Team Blue.png",
-    "File:The Iron Barrel Team Blue.png",
-    "File:The Iron Flight Team Blue.png",
-    "File:The Jade Price Team Blue.png",
-    "File:The Korinthian Team Blue.png",
-    "File:The Last Crutch Team Blue.png",
-    "File:The Last Ride Team Blue.png",
-    "File:The Mad King Team Blue.png",
-    "File:The Mark Team Blue.png",
-    "File:The Master Chief Team Blue.png",
-    "File:The Miracle Workers Team Blue.png",
-    "File:The Mittens Team Blue.png",
-    "File:The Mixup Team Blue.png",
-    "File:The Monarchy Team Blue.png",
-    "File:The Monster Gnash Team Blue.png",
-    "File:The Monster Slash Team Blue.png",
-    "File:The Mountain Team Blue.png",
-    "File:The Nautilus Team Blue.png",
-    "File:The Neutralizers Team Blue.png",
-    "File:The North Wind Team Blue.png",
-    "File:The Oath Team Blue.png",
-    "File:The Obol Team Blue.png",
-    "File:The Pale Horse Team Blue.png",
-    "File:The Phenom Team Blue.png",
-    "File:The Playback Level 1 Team Blue.png",
-    "File:The Playback Level 2 Team Blue.png",
-    "File:The Playback Level 3 Team Blue.png",
-    "File:The Punchlines Team Blue.png",
-    "File:The Renegade Team Blue.png",
-    "File:The Roadhogs Team Blue.png",
-    "File:The Rock Team Blue.png",
-    "File:The Rook Team Blue.png",
-    "File:The Seeker's Spear Team Blue.png",
-    "File:The Sequels Team Blue.png",
-    "File:The Shrine Team Blue.png",
-    "File:The Signature Team Blue.png",
-    "File:The Singularities Team Blue.png",
-    "File:The Slayer Team Blue.png",
-    "File:The Smackdown Team Blue.png",
-    "File:The Snowplow Team Blue.png",
-    "File:The Starsmasher Team Blue.png",
-    "File:The Steamroller Team Blue.png",
-    "File:The Taggers Team Blue.png",
-    "File:The Talisman Team Blue.png",
-    "File:The Test Team Blue.png",
-    "File:The Unblinking Team Blue.png",
-    "File:The Undertaker Team Blue.png",
-    "File:The Yetee Teros Team Blue.png",
-    "File:Thea Team Blue.png",
-    "File:Thermal Runaway Team Blue.png",
-    "File:Thistle's Flight Team Blue.png",
-    "File:THNX Researcher Loki Team Blue.png",
-    "File:Thor by the Shore Team Blue.png",
-    "File:Thor Team Blue.png",
-    "File:Thornwood Dusk Team Blue.png",
-    "File:Three Fingered Discount Team Blue.png",
-    "File:Thresher Team Blue.png",
-    "File:Throttle Team Blue.png",
-    "File:Throwing Anchor Team Blue.png",
-    "File:Thumbs Down Team Blue.png",
-    "File:Thunder and Clash Team Blue.png",
-    "File:Thunder Bass Blasters Team Blue.png",
-    "File:Tiburon's Teeth Team Blue.png",
-    "File:Tide Queen Team Blue.png",
-    "File:Tide Turners Team Blue.png",
-    "File:Tiercel Orb Team Blue.png",
-    "File:Tiger's Talwar Team Blue.png",
-    "File:Tigress Team Blue.png",
-    "File:Time is Running (Out) Team Blue.png",
-    "File:Tines of the Heart Team Blue.png",
-    "File:Tinyfigure Seven Team Blue.png",
-    "File:Tokyo Yumiko Team Blue.png",
-    "File:Tomb Tamer Nai Team Blue.png",
-    "File:Tooth & Trouble Team Blue.png",
-    "File:Tooth and Nail Team Blue.png",
-    "File:Toothpick Team Blue.png",
-    "File:Toph Team Blue.png",
-    "File:Torchbringer Team Blue.png",
-    "File:Tourney Lance Team Blue.png",
-    "File:Toxic Ranseur Team Blue.png",
-    "File:Treble Makers Team Blue.png",
-    "File:Trench Cutters Team Blue.png",
-    "File:Trend Setter Team Blue.png",
-    "File:Trials of Worth Team Blue.png",
-    "File:Trident of Antiquity Team Blue.png",
-    "File:Trident Team Blue.png",
-    "File:Tropic Breeze Team Blue.png",
-    "File:Trueflight Team Blue.png",
-    "File:Trusty Trowels Team Blue.png",
-    "File:Truth Team Blue.png",
-    "File:Tundra Geir Team Blue.png",
-    "File:Tundra's Talon Team Blue.png",
-    "File:Turtle Crossing Team Blue.png",
-    "File:Tusk Team Blue.png",
-    "File:Twilight Cleaver Team Blue.png",
-    "File:Twilight's Emissary Team Blue.png",
-    "File:Twin Katanas Team Blue.png",
-    "File:Twin Sai Team Blue.png",
-    "File:Twin Solstice Team Blue.png",
-    "File:Twin Tails Team Blue.png",
-    "File:Twirling Flourish Team Blue.png",
-    "File:Twisted Titanium Team Blue.png",
-    "File:Typhon Team Blue.png",
-    "File:Tyr's Fists Team Blue.png",
-    "File:Ulgrim Team Blue.png",
-    "File:Ultra Oil Lamp Team Blue.png",
-    "File:Ultra-Lance Team Blue.png",
-    "File:Undying Mirage Team Blue.png",
-    "File:Unicorn Stampede Team Blue.png",
-    "File:Uprising Team Blue.png",
-    "File:Uraeus' Fang Team Blue.png",
-    "File:Urban Guardian Zariel Team Blue.png",
-    "File:Val Team Blue.png",
-    "File:Valkyrie's Fury Team Blue.png",
-    "File:Valor Team Blue.png",
-    "File:Valorous Charge Team Blue.png",
-    "File:Vampiric Embrace Team Blue.png",
-    "File:Vanir Guardian Bödvar Team Blue.png",
-    "File:Vanquisher Team Blue.png",
-    "File:Varin's Axe Team Blue.png",
-    "File:Vector Model 01 Team Blue.png",
-    "File:Vector Spear Team Blue.png",
-    "File:Vector Team Blue.png",
-    "File:Vengeance at Hand Team Blue.png",
-    "File:Vengeance Team Blue.png",
-    "File:Venom of Eba Team Blue.png",
-    "File:Verdict Team Blue.png",
-    "File:Vespian Six Shooter Team Blue.png",
-    "File:Vetr Bearded Axe Team Blue.png",
-    "File:Vial of Crows Team Blue.png",
-    "File:Victory Rush Team Blue.png",
-    "File:Viking's War-axe Team Blue.png",
-    "File:Villain Monologue Team Blue.png",
-    "File:Viper's Venom Team Blue.png",
-    "File:Vive la Révolucien Team Blue.png",
-    "File:Vivi Team Blue.png",
-    "File:Vixen Ada Team Blue.png",
-    "File:Voice of the Forest Team Blue.png",
-    "File:Voice of the Snow Team Blue.png",
-    "File:Volkov Team Blue.png",
-    "File:Von Evilstein's Heart Team Blue.png",
-    "File:Vraxx the King Team Blue.png",
-    "File:Vraxx the Viking Team Blue.png",
-    "File:Vraxxy Jones Team Blue.png",
-    "File:Völsung Brynn Team Blue.png",
-    "File:Wanderer Seven Team Blue.png",
-    "File:Wandering Wind Team Blue.png",
-    "File:War Pipes Team Blue.png",
-    "File:Warborn Ulgrim Team Blue.png",
-    "File:Warchief Bödvar Team Blue.png",
-    "File:Warhammer Team Blue.png",
-    "File:Warlord Jhala Team Blue.png",
-    "File:Warrior Spirit Kor Team Blue.png",
-    "File:Warrior's Pride Team Blue.png",
-    "File:Warrior's Wisdom Team Blue.png",
-    "File:Wartusk Team Blue.png",
-    "File:Wasteland Ada Team Blue.png",
-    "File:Wasteland Treaders Team Blue.png",
-    "File:Wasteland Vraxx Team Blue.png",
-    "File:Water Wars Cross Team Blue.png",
-    "File:Watermelon Slice Team Blue.png",
-    "File:Watery Grave Team Blue.png",
-    "File:Wave Breakers Team Blue.png",
-    "File:Waveslicer Team Blue.png",
-    "File:Weero Wings Team Blue.png",
-    "File:Wenqing Lin Fei Team Blue.png",
-    "File:Werebat Ragnir Team Blue.png",
-    "File:Werewolf Thatch Team Blue.png",
-    "File:Wheel Locks Team Blue.png",
-    "File:Whirlwinds Team Blue.png",
-    "File:Whispering Blade Team Blue.png",
-    "File:Whispers of the Asp Team Blue.png",
-    "File:Whistling Death Team Blue.png",
-    "File:White Fang Gnash Team Blue.png",
-    "File:White Out Nix Team Blue.png",
-    "File:Whitewater Gem Team Blue.png",
-    "File:Wicked Blade Team Blue.png",
-    "File:Wicked Claws Team Blue.png",
-    "File:Wicked Wings Team Blue.png",
-    "File:Widowmaker Reno Team Blue.png",
-    "File:Wild Hunt Team Blue.png",
-    "File:Wild's Smasher Team Blue.png",
-    "File:Winged Blade Team Blue.png",
-    "File:Winged Danger Team Blue.png",
-    "File:Winged Glory Team Blue.png",
-    "File:Winged Serpent Nai Team Blue.png",
-    "File:Winged Solstice Team Blue.png",
-    "File:Wings of Justice Team Blue.png",
-    "File:Wings of Liberty Team Blue.png",
-    "File:Wings of the Sage Team Blue.png",
-    "File:Wings of Victory Team Blue.png",
-    "File:Winter Daggers Team Blue.png",
-    "File:Winter's Grasp Team Blue.png",
-    "File:Winter's Grave Team Blue.png",
-    "File:Wipeout Nix Team Blue.png",
-    "File:Wipeouts Team Blue.png",
-    "File:Witchfire Brynn Team Blue.png",
-    "File:Witching Broom Team Blue.png",
-    "File:Withering Scythe Team Blue.png",
-    "File:Wolf's Howl Team Blue.png",
-    "File:Wolfsilver Blades Team Blue.png",
-    "File:Wooden Knuckles Team Blue.png",
-    "File:World Champion Lance Team Blue.png",
-    "File:World Cleaver Team Blue.png",
-    "File:World Ender Level 1 Team Blue.png",
-    "File:World Ender Level 2 Team Blue.png",
-    "File:World Ender Level 3 Team Blue.png",
-    "File:Wraith Barraza Team Blue.png",
-    "File:Wraith's Sickle Team Blue.png",
-    "File:Wrath of Hel Team Blue.png",
-    "File:Wreck the Halls Teros Team Blue.png",
-    "File:Wrecking Crew Team Blue.png",
-    "File:Wrought Iron Sword Team Blue.png",
-    "File:Wu Shang Kong Team Blue.png",
-    "File:Wu Shang Team Blue.png",
-    "File:Wu Shang the Breaker Team Blue.png",
-    "File:Wu Shang, the Seeker Level 1 Team Blue.png",
-    "File:Wu Shang, the Seeker Level 2 Team Blue.png",
-    "File:Wu Shang, the Seeker Level 3 Team Blue.png",
-    "File:Wurm Shooters Team Blue.png",
-    "File:Wyrmseeker Team Blue.png",
-    "File:Wyrmslayer Diana Team Blue.png",
-    "File:Wyvern's Sting Team Blue.png",
-    "File:Wyvernbane Team Blue.png",
-    "File:Xavier Woods Team Blue.png",
-    "File:Xianxia Lin Fei Team Blue.png",
-    "File:XLR8R's Team Blue.png",
-    "File:Xull Team Blue.png",
-    "File:Yakuza Koji Team Blue.png",
-    "File:Yard Marker Team Blue.png",
-    "File:Yari Team Blue.png",
-    "File:Yataghan Sword Team Blue.png",
-    "File:Yggdrasil's Branch Team Blue.png",
-    "File:Ymir's Sledge Team Blue.png",
-    "File:Yoga Fists Team Blue.png",
-    "File:Yokai Naginata Team Blue.png",
-    "File:Yokai Slam Team Blue.png",
-    "File:Yokai Smash Team Blue.png",
-    "File:Yokai's Spirit Team Blue.png",
-    "File:Yorishiro Team Blue.png",
-    "File:Yoshimitsu Team Blue.png",
-    "File:Yoshimitsu's Blade Team Blue.png",
-    "File:Yoshimitsu's Scythe Team Blue.png",
-    "File:Yumi Team Blue.png",
-    "File:Yumiko Team Blue.png",
-    "File:Zariel Team Blue.png",
-    "File:Zenith Daggers Team Blue.png",
-    "File:Zhaktari Issue Team Blue.png",
-    "File:Zhulong Lin Fei Team Blue.png",
-    "File:Zip and Snap Team Blue.png",
-    "File:Zombie Whisperer Team Blue.png",
-    "File:Zuko Team Blue.png"
-]
+	let pagesList = new Set;
+
+	let cont = null;
+	try{
+		// for(let c of catlist){
+		// 	console.log(c)
+			do {
+				void await async function retry(){
+					let extention = "";
+					for(let [k, v] of Object.entries(cont ?? {})){
+						extention += `&${k}=${encodeURIComponent(v)}`
+					}
+					console.log("Fetching batch of pages")
+					let result = await fetch(`https://brawlhalla.wiki.gg/api.php?action=query&format=json&prop=&list=querypage&formatversion=2&qppage=Uncategorizedimages&qplimit=5000${extention}`)
+					if(result.status == 429 || result.status == 502){
+						console.log("Retrying in 5")
+						await sleep(5e3)
+						return retry()
+					}
+					result = await result.json()
+					cont = result.continue;
+					if(result.query?.querypage){
+						pagesList = pagesList.union(new Set(result.query.querypage.results))
+						return sleep(1000)
+					}
+				}()
+			} while(cont)
+			console.log("Pagelist fetched")
+		// }
+	} catch(err){
+		console.error(err)
+		exit()
+	}
 
 	bot.batchOperation(
-		pagesList,
+		[...pagesList].map(e => e.title),
 		(page, idx) => {
-			return Promise.race([bot.edit(page, (rev) => {
-				return {
-					text: rev.content.replace(/(Blue|Red)[_\s]+images/, "Team $1 images"),
-					summary: `Moved to correct category`,
-					minor: true
+			let cats = new Set,
+				flag = "none";
+			skinOrWeapon: {
+				for(let c of colours){
+					if(page.includes(` ${c}.png`)){
+						cats.add(`[[Category:${c} images]]`)
+						break skinOrWeapon
+					}
+				}
+				if(page.includes("Classic Colors.png") || /1 \d+x\d+.png/.test(page)){
+					cats.add(flag = "{{delete|Duplicate file}}")
+					break skinOrWeapon
+				}
+				// if(skins.some(e => e.test(page))){
+				// 	cats.add(flag = "[[Category:Skin images]]")
+				// 	break skinOrWeapon
+				// }
+				// if(legends.some(e => page == `File:${e}.png`)){
+				// 	cats.add(flag = "[[Category:Legend images]]")
+				// 	break skinOrWeapon
+				// }
+				// if(weapons.some(e => page.includes(`File:${e}`))){
+				// 	cats.add(flag = "[[Category:Weapon skin images]]")
+				// }
+			}
+			avatar: if(page.includes("File:Avatar")){
+				if(page.includes("Avatar Flag")){
+					cats.add(flag = "[[Category:Flag avatar images]]")
+					break avatar
+				}
+				let match = /Avatar (Diamond|Gold|Participation|Platinum) \d+/.exec(page)
+				if(match){
+					cats.add(`[[Category:${match[1]} ranked avatar images]]`)
+					cats.add(flag = "[[Category:Ranked avatar images]]")
+					break avatar
+				}
+				if(page.includes("Avatar Doodle")){
+					cats.add("[[Category:Doodle avatar images]]")
+					break avatar
+				}
+				cats.add(flag = "[[Category:Avatar images]]")
+			}
+			ani: if(page.includes("File:Ani")){
+				if(page.includes("AniAvatar")){
+					cats.add(flag = "[[Category:Animated avatar images]]")
+				}
+				if(/\(\d*x?\d+px\)\.png/.test(page)){
+					cats.add("[[Category:Alternate resolution images]]")
+					break ani
+				}
+				if(/File:Ani.+\.png/.test(page)){
+					cats.add("[[Category:Animated PNGs]]")
+				}
+			}
+			if(page.includes("File:BGS ")){
+				cats.add("[[Category:Brawlhalla Grand Slam images]]")
+			}
+			// if(page.indexOf(".mp3") == page.length - 4){
+			// 	cats.push("[[Category:Sound files]]")
+			// }
+			if(/Battlepass BP\d/.test(page)){
+				cats.add(flag = "[[Category:Battle Pass images]]")
+			}
+			if(/Battlepass.+\.mp3/.test(page)){
+				cats.add(flag = "[[Category:Battle Pass music]]")
+			}
+			if((page.includes("File:Bot ") && cats.size == 0) || page.includes("File:AniBot")){
+				cats.add(flag = "[[Category:Sidekick images]]")
+			}
+			if(page.includes("File:BotIcon")){
+				cats.add(flag = "[[Category:Sidekick icons]]")
+			}
+			if(/BG( \d)?.png/.test(page)){
+				cats.add(flag = "[[Category:Epic backgrounds]]")
+			}
+			if(page.includes("bundle.png")){
+				cats.add("[[Category:Prime Bundle icons]]")
+			}
+			if(page.includes("File:Achievement")){
+				cats.add("[[Category:Achievement images]]")
+			}
+			if(page.includes("Brawlhalla Logo") || page.includes("File:Logo") || page.includes("Logo.png")){
+				cats.add(flag = "[[Category:Logo images]]")
+			}
+			if(page.includes("File:Color ")){
+				cats.add("[[Category:Color icon images]]")
+			}
+			if(/Concept\s?Art/i.test(page)){
+				cats.add(flag = "[[Category:Concept art]]")
+			}
+			if(page.includes("File:Demo ")){
+				cats.add("[[Category:Mechanics demos]]")
+			}
+			if(page.includes("File:Emoji ")){
+				cats.add(flag = "[[Category:Emoji images]]")
+			}
+			if(page.includes("Example.png")){
+				cats.add("[[Category:Weapon composite images]]")
+			}
+			if(page.includes("File:Flag of ")){
+				cats.add(flag = "[[Category:Region flags]]")
+			}
+			if(/Gadget [^0-9]+\.png/.test(page)){
+				cats.add(flag = "[[Category:Gadget images]]")
+			}
+			if(/KO .+\.gif/.test(page)){
+				cats.add(flag = "[[Category:Animated KO images]]")
+			}
+			if(page.includes("File:KO SFX")){
+				cats.add("[[Category:KO sound effects]]")
+			}
+			if(page.includes("File:Loading")){
+				cats.add("[[Category:Loading frame images]]")
+			}
+			if(page.includes("File:Map ")){
+				cats.add(flag = "[[Category:Map images]]")
+			}
+			if(page.includes("File:Nav")){
+				cats.add("[[Category:Navigation button images]]")
+			}
+			if(page.includes("Official Artwork")){
+				cats.add(flag = "[[Category:Official artwork]]")
+			}
+			if(page.includes("File:Palette")){
+				cats.add(flag = "[[Category:Color scheme palettes]]")
+			}
+			if(/Patch\d+/.test(page)){
+				cats.add(flag = "[[Category:Patch images]]")
+			}
+			if(page.includes("Chest.png")){
+				cats.add(flag = "[[Category:Chest images]]")
+			}
+			if(page.includes("Chest Tile.jpg")){
+				cats.add(flag = "[[Category:Chest tiles]]")
+			}
+			if(/File:Podium.+.png/.test(page)){
+				cats.add(flag = "[[Category:Podium images]]")
+			}
+			if(page.includes("File:Podium SFX")){
+				cats.add(flag = "[[Category:Podium sounds]]")
+			}
+			if(page.includes("File:Portrait")){
+				cats.add(flag = "[[Category:Portrait images]]")
+			}
+			if(page.includes("File:Profile")){
+				cats.add("[[Category:Profiles of people]]")
+			}
+			if(page.includes("File:STC")){
+				cats.add("[[Category:Steam Trading Cards images]]")
+			}
+			if(page.includes("File:Setting")){
+				cats.add("[[Category:Demonstration images]]")
+			}
+			if(page.includes("File:Sig ")){
+				cats.add(flag = "[[Category:Signature images]]")
+			}
+			if(page.includes("SkinIcon")){
+				cats.add(flag = "[[Category:Skin icons]]")
+			}
+			if(/File:Stats\d\w*1?\.png/.test(page)){
+				cats.add(flag = "[[Category:Stats images]]")
+			}
+			if(page.includes("StatIcon")){
+				cats.add("[[Category:Stat icons]]")
+			}
+			if(uiImages.includes(page)){
+				cats.add(flag = "[[Category:UI images]]")
+			}
+			if(page.includes("File:Dice")){
+				cats.add("[[Category:Dice icons]]")
+			}
+			if(page.includes("Pack.jpg")){
+				cats.add(flag = "[[Category:DLC images]]")
+			}
+			if(page.includes("File:Queue")){
+				cats.add("[[Category:Queue images]]")
+			}
+			if(/File:Taunt.+\.png/.test(page)){
+				cats.add(flag = "[[Category:Taunt images]]")
+			}
+			if(/File:Taunt.+\.mp3/.test(page)){
+				cats.add("[[Category:Taunt sound effects]]")
+			}
+			if(page.includes("Theme.mp3") || /Level.+\.mp3/i.test(page)){
+				cats.add(flag = "[[Category:Music]]")
+			} else if(page.includes(".mp3")){
+				return new Promise((resolve) => {
+					setTimeout(() => resolve("Timeout"), 10e3)
+					console.log("mp3 detected")
+					fetch(`https://brawlhalla.wiki.gg/api.php?action=query&format=json&titles=${encodeURIComponent(page)}&prop=imageinfo&iiprop=timestamp|user|url`)
+						.then(e => e.json())
+						.then(json => {
+							let key, src;
+							try {
+								key = Object.keys(json.query?.pages)[0];
+								if(+key > 0){
+									src = json.query.pages[key].imageinfo?.[0]?.url
+								} else {
+									console.log("Cannot fetch file info")
+									return resolve("Cannot fetch file info")
+								}
+							} catch {
+								console.log("Cannot fetch file info")
+								resolve("Cannot fetch file info")
+							}
+							if(src){
+								fetch(src)
+									.then(e => e.arrayBuffer())
+									.then(arrayBuffer => {
+										const buffer = Buffer.from(new Uint8Array(arrayBuffer))
+										// if track is longer than 45 seconds, it's probably music, not a sound effect
+										if(getMP3Duration(buffer) >= 45e3){
+											resolve(Promise.race([bot.edit(page, (rev) => ({
+												// return parameters needed for [[mw:API:Edit]]
+												text: (() => {
+													if(rev.content === "")
+														return "[[Category:Music]]";
+													if(rev.content.includes("[[Category:Music]]"))
+														return rev.content.replace("[[Category:Music]]", "[[category:Music]]")
+													if(/\[\[category:\s*Music\s*\]\]/i.test(rev.content))
+														return rev.content.replace(/\[\[category:\s*Music\s*\]\]/i, "[[Category:Music]]")
+													return `${rev.content.trim()}\n[[Category:Music]]`
+												})(),
+												summary: "Added|Fixed category",
+												minor: true
+											})).catch(err => console.log(err)).then(() => done.push(page)), sleep(4500)]).then(e => sleep(e == "sleep" ? 10000 : 2750)))
+										} else {
+											console.log("Skipped")
+											resolve("Skipped")
+										}
+									})
+							} else {
+								console.log("Cannot fetch file info")
+								resolve("Cannot fetch file info")
+							}
+						})
+				})
+			}
+			if(/\bpromo\b/i.test(page)){
+				cats.add("[[Category:Promo images]]")
+			}
+			if(/icon\.png/i.test(page) || page.includes("EventIcon") || page.includes("File:Icon")){
+				cats.add("[[Category:Icon images]]")
+			}
+			if(/weapons?( skins)?\.(png|jpe?g)/i.test(page)){
+				cats.add("[[Category:Skin set images]]")
+			}
+			if(page.includes("File:ROA") || page.includes("File:Roblox") || page.includes("File:Growtopia")){
+				cats.add("[[Category:Images from other games]]")
+			}
+			return cats.size == 0 ? Promise.resolve("Skipped") : Promise.race([bot.edit(page, (rev) => {
+				let currentCats = [...rev.content.matchAll(/\[\[\s*category\s*:[^\]]+\]\]/ig)].map(e => e?.[0].replaceAll("_", " ")),
+					content = rev.content.replaceAll("_", " "),
+					message = "Added";
+				switch(flag){
+					case "{{delete|Duplicate file}}":
+						return {
+							// return parameters needed for [[mw:API:Edit]]
+							text: content === "" ? sortAndJoin(cats) : `${content.trim()}\n${sortAndJoin(cats)}`,
+							summary: "Tagging for deletion",
+							minor: true
+						}
+					case "[[Category:Ranked avatar images]]":
+					case "[[Category:Avatar images]]":
+					case "[[Category:Flag avatar images]]":
+					case "[[Category:Animated avatar images]]":
+					case "[[Category:Animated KO images]]":
+					case "[[Category:Skin images]]":
+					case "[[Category:Skin icons]]":
+					case "[[Category:DLC images]]":
+					case "[[Category:UI images]]":
+					case "[[Category:Stat images]]":
+					case "[[Category:Map images]]":
+					case "[[Category:Battle Pass music]]":
+					case "[[Category:Sidekick icons]]":
+					case "[[Category:Sidekick images]]":
+					case "[[Category:Logo images]]":
+					case "[[Category:Concept art]]":
+					case "[[Category:Gadget images]]":
+					case "[[Category:Emoji images]]":
+					case "[[Category:Map images]]":
+					case "[[Category:Color scheme palettes]]":
+					case "[[Category:Patch images]]":
+					case "[[Category:Podium images]]":
+					case "[[Category:Taunt images]]":
+					case "[[Category:Podium sounds]]":
+					case "[[Category:Chest images]]":
+					case "[[Category:Chest tiles]]":
+					case "[[Category:Signature images]]":
+					case "[[Category:Stats images]]":
+					case "[[Category:Music]]":
+					case "[[Category:Ranked banner images]]":
+					case "[[Category:Portrait images]]":
+						for(let r of ["Skin icons", "Stats", "ranked avatars", "avatars", "Animated Avatars", "realm images", "UI images", "Taunt images", "Podium images", "Chest images", "Patch images", "Color scheme palettes", "DLC images", "Music", "Sidekick icons", "Sidekick images", "Logo images", "Concept art", "Gadget images", "Emoji images", "Animated KO images", "Podium sounds", "Signature images", "icon images", "chest tiles", "ranked banners", "Portrait images", "Official artwork"]){
+							let found = currentCats.find(e => new RegExp(`\\[\\[\\s*category\\s*:\\s*${r}\\s*\\]\\]`, "i").test(e));
+							if(found){
+								content = content.replace(found, "");
+								currentCats = currentCats.filter(e => e != found)
+								if(found == `[[Category:${r}]]`){
+									cats.delete(`[[Category:${r}]]`)
+									cats.add(`[[category:${r}]]`)
+								}
+							}
+						}
+						message = "Tweaked";
+					default:
+						for(let c of currentCats){
+							let exec = /\[\[\s*category\s*:\s*(.+)\s*\]\]/i.exec(c);
+							cats.add(`[[Category:${exec[1][0].toUpperCase()}${exec[1].substring(1)}]]`)
+							content = content.replace(exec[0], "")
+						}
+						content = content === "" ? sortAndJoin(cats) : `${content.trim()}\n${sortAndJoin(cats)}`
+						return {
+							// return parameters needed for [[mw:API:Edit]]
+							text: content == rev.content ? content.replace("Category", "category") : content,
+							summary: `${message} categor${cats.size == 1 ? "y" : "ies"}`,
+							minor: true
+						}
 				}
 			}).catch(err => console.log(err)).then(() => done.push(page)), sleep(4500)]).then(e => sleep(e == "sleep" ? 10000 : 2750))
 		},
