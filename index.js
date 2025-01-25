@@ -4,10 +4,11 @@ let pagesList = [];
 const fs = require("node:fs");
 const readline = require("readline");
 let { colours, weapons, legends } = require("./patterns.json");
+const { fetchUncategorized } = require("./fetchUncategorized.js")
 
-const getMP3Duration = require('get-mp3-duration');
+// const getMP3Duration = require('get-mp3-duration');
 
-const uiImages = require("./uiImages.json");
+// const uiImages = require("./uiImages.json");
 
 readline.emitKeypressEvents(process.stdin);
 
@@ -29,6 +30,7 @@ let interval,
 function exit(){
 	clearInterval(interval)
 	fs.writeFileSync("done.log", JSON.stringify(done))
+	console.trace()
 	process.exit()
 }
 
@@ -75,151 +77,33 @@ void async function(){
 	});
 	console.log("Emergency Shutoff activated")
 
-	const catlist = [
-		{
-			"from": "Category:Achievement Images",
-			"to": "Category:Achievement images"
-		},
-		{
-			"from": "Category:Animated Avatars",
-			"to": "Category:Animated avatar images"
-		},
-		{
-			"from": "Category:Animated KO Images",
-			"to": "Category:Animated KO images"
-		},
-		{
-			"from": "Category:Character images",
-			"to": "Category:Legend images"
-		},
-		{
-			"from": "Category:Chest Borders",
-			"to": "Category:Chest border images"
-		},
-		{
-			"from": "Category:Chest Tiles",
-			"to": "Category:Chest tiles"
-		},
-		{
-			"from": "Category:Color Scheme Palettes",
-			"to": "Category:Color scheme palettes"
-		},
-		{
-			"from": "Category:Concept Art",
-			"to": "Category:Concept art"
-		},
-		{
-			"from": "Category:Demonstration Images",
-			"to": "Category:Demonstration images"
-		},
-		{
-			"from": "Category:Kira-Kira images",
-			"to": "Category:Kira-kira images"
-		},
-		{
-			"from": "Category:Old Design Images",
-			"to": "Category:Unused Content"
-		},
-		{
-			"from": "Category:Podium Sounds",
-			"to": "Category:Podium sounds"
-		},
-		{
-			"from": "Category:Ranked banners",
-			"to": "Category:Ranked banner images"
-		},
-		{
-			"from": "Category:Realm images",
-			"to": "Category:Map images"
-		},
-		{
-			"from": "Category:Realms",
-			"to": "Category:Maps"
-		},
-		{
-			"from": "Category:Sidekick Icons",
-			"to": "Category:Sidekick icons"
-		},
-		{
-			"from": "Category:Stats",
-			"to": "Category:Stats images"
-		},
-		{
-			"from": "Category:Taunts",
-			"to": "Category:Emotes"
-		},
-		{
-			"from": "Category:Team Emotes",
-			"to": "Category:Buddy Emotes"
-		},
-		{
-			"from": "Category:UI Images",
-			"to": "Category:UI images"
-		}
-	]
+	
 
-	let pagesList = new Set;
-
-	let cont = null;
+	let pagesList = [];
 	try {
-		for(let c of catlist.map(e => e.from)){
-			console.log(c)
-			do {
-				void await async function retry(){
-					let extention = "";
-					for(let [k, v] of Object.entries(cont ?? {})){
-						extention += `&${k}=${encodeURIComponent(v)}`
-					}
-					console.log("Fetching batch of pages")
-					let result = await fetch(`https://brawlhalla.wiki.gg/api.php?action=query&format=json&prop=&list=categorymembers&cmtitle=${encodeURIComponent(c)}&cmlimit=5000${extention}`)
-					if(result.status == 429 || result.status == 502){
-						console.log("Retrying in 5")
-						await sleep(5e3)
-						return retry()
-					}
-					result = await result.json()
-					cont = result.continue;
-					if(result.query?.categorymembers){
-						pagesList = pagesList.union(new Set(result.query.categorymembers))
-						return sleep(1000)
-					}
-				}()
-			} while(cont)
-			console.log("Pagelist fetched")
-		}
+		pagesList = await fetchUncategorized()
 	} catch(err){
 		console.error(err)
-		exit()
+		return exit()
 	}
 
-	console.log([...pagesList].map(e => e.title))
-
 	bot.batchOperation(
-		[...pagesList].map(e => e.title),
-		(page, idx) => {
-			return Promise.race([bot.edit(page, (rev) => {
-				let content = rev.content;
-				for(let cat of catlist){
-					let regex = new RegExp(`\\[\\[[cC]ategory\\:\\s*${cat.from.substring(9).replaceAll(" ", "[_\\s]").replaceAll("-", "\\-")}\\s*\\]\\]`, "mg");
-					content = content.replaceAll(regex, `[[${cat.to}]]`)
+		pagesList,
+		(page, _idx) => {
+			for(let c of colours){
+				if(page.includes(` ${c}.png`)){
+					return Promise.race([bot.edit(page, (rev) => {
+						let content = rev.content.trim();
+						return ({
+							// return parameters needed for [[mw:API:Edit]]
+							text: content === "" ? `== Licensing ==\n{{License/BMG}}\n\n[[Category:${c} images]]` : `${content}\n\n[[Category:${c} images]]`,
+							summary: "Categorized",
+							minor: true
+						})
+					}).then(() => done.push(page)).catch(err => console.log(err)), sleep(4500)]).then(e => sleep(e == "sleep" ? 10000 : 2750))
 				}
-				let allCats = new Set;
-				for(let existCats of content.matchAll(/\[\[category:.+\]\]/ig)){
-					allCats.add(existCats[0])
-					content = content.replaceAll(existCats[0], "")
-				}
-				if(content.trim() == ""){
-					content = [...allCats].join("\n")
-				} else {
-					content = `${content.trim()}\n\n${[...allCats].join("\n")}`
-				}
-				return {
-					// return parameters needed for [[mw:API:Edit]]
-					text: content,
-					summary: "Moved to correct category",
-					minor: true
-				}
-			}).catch(err => console.log(err)).then(() => done.push(page)), sleep(4500)]).then(e => sleep(e == "sleep" ? 10000 : 2750))
+			}
+			return Promise.resolve("Skipped")
 		},
 		/* concurrency */ 3,
 		/* retries */ 2
