@@ -4,7 +4,7 @@ let pagesList = [];
 const fs = require("node:fs");
 const readline = require("readline");
 let { colours, weapons, legends } = require("./patterns.json");
-const { fetchUncategorized } = require("./fetchUncategorized.js")
+const { fetchUncategorized } = require("./fetch_uncategorized.js")
 
 // const getMP3Duration = require('get-mp3-duration');
 
@@ -86,24 +86,30 @@ void async function(){
 		console.error(err)
 		return exit()
 	}
+	console.log(pagesList)
 
 	bot.batchOperation(
 		pagesList,
 		(page, _idx) => {
-			for(let c of colours){
-				if(page.includes(` ${c}.png`)){
-					return Promise.race([bot.edit(page, (rev) => {
-						let content = rev.content.trim();
-						return ({
-							// return parameters needed for [[mw:API:Edit]]
-							text: content === "" ? `== Licensing ==\n{{License/BMG}}\n\n[[Category:${c} images]]` : `${content}\n\n[[Category:${c} images]]`,
-							summary: "Categorized",
-							minor: true
-						})
-					}).then(() => done.push(page)).catch(err => console.log(err)), sleep(4500)]).then(e => sleep(e == "sleep" ? 10000 : 2750))
+			return Promise.race([bot.edit(page, (rev) => {
+				let content = rev.content.trim();
+				if(!(/==\s*licensing\s*==/i.test(content))){
+					content = content === "" ? "== Licensing ==\n{{License/BMG}}" : `${content}\n\n== Licensing ==\n{{License/BMG}}`
 				}
-			}
-			return Promise.resolve("Skipped")
+				for(let c of colours){
+					if(page.includes(` ${c}.png`)){
+						content = content === "" ? `[[Category:${c} images]]` : `${content}\n\n[[Category:${c} images]]`;
+						break
+					}
+				}
+				return content !== rev.content.trim() && ({
+					// return parameters needed for [[mw:API:Edit]]
+					text: content,
+					summary: "Categorized",
+					minor: true
+				})
+			}).then(() => done.push(page)).catch(err => console.log(err)), sleep(4500)]).then(e => sleep(e == "sleep" ? 10000 : 3750))
+			// return Promise.resolve("Skipped")
 		},
 		/* concurrency */ 3,
 		/* retries */ 2

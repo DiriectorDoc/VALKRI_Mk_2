@@ -14,7 +14,7 @@
   "license": "MIT",
   "dependencies": {
     "get-mp3-duration": "^1.0.0",
-    "mwn": "^2.0.2",
+    "mwn": "^2.0.4",
     "readline": "^1.3.0"
   }
 }
