@@ -3,7 +3,7 @@ const credentials = require("./password.json"/* Local file */);
 const fs = require("node:fs");
 const readline = require("readline");
 let { colours, weapons, legends } = require("./patterns.json");
-const { fetchUncategorized } = require("./fetch_uncategorized.js")
+const os = require("os");
 
 // const getMP3Duration = require('get-mp3-duration');
 
@@ -77,8 +77,9 @@ void async function(){
 	console.log("Emergency Shutoff activated")
 
 	let pagesList = [];
+	const dir = `C:\\Users\\${os.userInfo().username}\\BrawlhallaRenders`;
 	try {
-		pagesList = await fetchUncategorized()
+		pagesList = fs.readdirSync(dir)
 	} catch(err){
 		console.error(err)
 		return exit()
@@ -88,24 +89,17 @@ void async function(){
 	bot.batchOperation(
 		pagesList,
 		(page, _idx) => {
-			return Promise.race([bot.edit(page, (rev) => {
-				let content = rev.content.trim();
-				if(!(/==\s*licensing\s*==/i.test(content))){
-					content = content === "" ? "== Licensing ==\n{{License/BMG}}" : `${content}\n\n== Licensing ==\n{{License/BMG}}`
-				}
-				for(let c of colours){
-					if(page.includes(` ${c}.png`)){
-						content = content === "" ? `[[Category:${c} images]]` : `${content}\n\n[[Category:${c} images]]`;
-						break
-					}
-				}
-				return content !== rev.content.trim() && ({
-					// return parameters needed for [[mw:API:Edit]]
-					text: content,
-					summary: "Categorized",
-					minor: true
-				})
-			}).then(() => done.push(page)).catch(err => console.log(err)), sleep(4500)]).then(e => sleep(e == "sleep" ? 10000 : 3750))
+			return Promise.race([bot.upload(`${dir}\\${page}`, page, `File uploaded programmatically by VALKRI MK 2
+
+== Licensing ==
+{{License/BMG}}${(() => {
+	for(let e of colours){
+		if(page.includes(`${e}.png`)) return `
+
+[[Category:${e} images]]`
+	}
+	return ""
+})()}`, {ignorewarnings: false}), sleep(4500)]).then(e => sleep(e == "sleep" ? 10000 : 3750))
 			// return Promise.resolve("Skipped")
 		},
 		/* concurrency */ 3,
