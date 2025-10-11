@@ -91,13 +91,16 @@ void async function(){
 			return Promise.race([bot.edit(page, (rev) => {
 				let content = rev.content.trim();
 				if(!(/==\s*licensing\s*==/i.test(content))){
-					content = content === "" ? "== Licensing ==\n{{License/BMG}}" : `${content}\n\n== Licensing ==\n{{License/BMG}}`
+					content = content === "" ? "== Licensing ==\n{{License/BMG}}" : `${content.trim()}\n\n== Licensing ==\n{{License/BMG}}`
 				}
 				for(let c of colours){
 					if(page.includes(` ${c}.png`)){
-						content = content === "" ? `[[Category:${c} images]]` : `${content}\n\n[[Category:${c} images]]`;
+						content = `${content.trim()}\n\n[[Category:${c} images]]`;
 						break
 					}
+				}
+				if(/^Patch\d+[_\s]/i.test(page)){
+					content += "\n\n[[Category:Patch images]]"
 				}
 				return content !== rev.content.trim() && ({
 					// return parameters needed for [[mw:API:Edit]]

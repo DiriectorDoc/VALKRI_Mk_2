@@ -57,7 +57,7 @@ void async function(){
 	console.log("Logged in")
 
 	console.log("Enabling Emergency Shutoff")
-	await bot.enableEmergencyShutoff({
+	bot.enableEmergencyShutoff({
 		// The name of the page to check
 		page: "User:VALKRI_Mk_2/shutoff",
 	
