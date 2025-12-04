@@ -15,6 +15,7 @@
 		"Art Deco",
 		"Bifrost",
 		"Black",
+		"Blacklight",
 		"Blue",
 		"Brown",
 		"Charged OG",
@@ -32,6 +33,7 @@
 		"Frozen Forest",
 		"Gala",
 		"Goldforged",
+		"Ghoulish",
 		"Green",
 		"Grey",
 		"Haunting",
@@ -141,5 +143,14 @@
 		"Scythe",
 		"Spear",
 		"Sword"
+	],
+	"misc": [
+		{
+			"find": {
+				"pattern": "^Patch\\d+[_\\s]",
+				"flags": "i"
+			},
+			"add": "[[Category:Patch images]]"
+		}
 	]
 }

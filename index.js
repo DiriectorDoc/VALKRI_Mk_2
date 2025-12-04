@@ -51,7 +51,8 @@ void async function(){
 	
 		defaultParams: {
 			assert: "user" // ensure we're logged in
-		}
+		},
+		userAgent: "VALKRI_Mk_2/1.0.0 (https://github.com/DiriectorDoc/VALKRI_Mk_2) mwn/3.0.1"
 	});
 
 	console.log("Logged in")
@@ -89,19 +90,31 @@ void async function(){
 		pagesList,
 		(page, _idx) => {
 			return Promise.race([bot.edit(page, (rev) => {
-				let content = rev.content.trim();
+				let content = rev.content.trim(),
+					cats = new Set;
 				if(!(/==\s*licensing\s*==/i.test(content))){
 					content = content === "" ? "== Licensing ==\n{{License/BMG}}" : `${content.trim()}\n\n== Licensing ==\n{{License/BMG}}`
 				}
+				let filename = page.replace(/^File:/, "");
 				for(let c of colours){
-					if(page.includes(` ${c}.png`)){
-						content = `${content.trim()}\n\n[[Category:${c} images]]`;
+					if(filename.includes(` ${c}.png`)){
+						cats.add(`[[Category:${c} images]]`)
 						break
 					}
 				}
-				if(/^Patch\d+[_\s]/i.test(page)){
-					content += "\n\n[[Category:Patch images]]"
+				if(/^Patch\d+[_\s]/i.test(filename)){
+					cats.add("[[Category:Patch images]]")
 				}
+				if(/^SplashArt[_\s]/i.test(filename)){
+					cats.add("[[Category:Event splash art]]")
+				}
+				if(/^Official[_\s]Artwork[_\s]/i.test(filename)){
+					cats.add("[[Category:Official artwork]]")
+				}
+				if(/^\w+weapon\.png$/i.test(filename)){
+					cats.add("[[Category:Weapon drop images]]")
+				}
+				content = cats.size ? `${content.trim()}\n\n${[...cats].join("\n")}` : content.trim();
 				return content !== rev.content.trim() && ({
 					// return parameters needed for [[mw:API:Edit]]
 					text: content,
