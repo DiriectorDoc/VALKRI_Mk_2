@@ -1,0 +1,321 @@
+Template:!!/doc
+Template:!((/doc
+Template:!)
+Template:!)/doc
+Template:!-
+Template:!-/doc
+Template:(
+Template:(!
+Template:(!/doc
+Template:((
+Template:((/doc
+Template:(/doc
+Template:)
+Template:))
+Template:))/doc
+Template:)/doc
+Template:*
+Template:*/doc
+Template:-
+Template:-/doc
+Template:=
+Template:=/doc
+Template:AdminOnly
+Template:Anim
+Template:Anim/doc
+Template:Attack
+Template:Attack/doc
+Template:Avatars
+Template:Avatars/doc
+Template:BOTW
+Template:BOTW/bottom
+Template:BOTW/doc
+Template:BOTW/top
+Template:BP
+Template:BP/doc
+Template:BP/end
+Template:BP/item
+Template:BP/stack
+Template:BP/start
+Template:BP/tier
+Template:BPReward
+Template:BPReward/doc
+Template:Balance
+Template:Balance/doc
+Template:Banner Image
+Template:Blank Infobox/doc
+Template:Branch
+Template:Branch/doc
+Template:BundleCost
+Template:Button
+Template:Button/doc
+Template:CalcBundleDiscount
+Template:CalcBundleDiscount/doc
+Template:CalcDex
+Template:CalcDex/doc
+Template:Chest Exclusive
+Template:Chest Exclusive/doc
+Template:Citation needed
+Template:Citation needed/doc
+Template:Cleanup
+Template:Cleanup/doc
+Template:Clear
+Template:Clear/doc
+Template:Clearfix
+Template:Clearfix/doc
+Template:Coin
+Template:ColorList/ByCategory
+Template:Color Companions
+Template:Color Companions/doc
+Template:Color Skins
+Template:Color Skins/doc
+Template:Color Variants
+Template:Color Variants/Category
+Template:Color Variants/doc
+Template:Color Weapon Skins
+Template:Color Weapon Skins/Single
+Template:Color Weapon Skins/doc
+Template:Cols
+Template:Cols/doc
+Template:Commons source
+Template:Community admins list/doc
+Template:Compact TOC
+Template:Compact TOC/doc
+Template:Copyright CC-BY-NC-SA 3.0
+Template:Copyright CC-BY-SA 3.0
+Template:Copyright GFDL
+Template:Copyright Game
+Template:Copyright LGPL
+Template:Copyright MIT
+Template:Copyright PD
+Template:Copyright fairuse
+Template:Copyright game
+Template:Copyright nolicense
+Template:Copyright permission
+Template:Copyright self
+Template:Copyrightbox
+Template:Copyrightbox/doc
+Template:CurrentEvents
+Template:Date range
+Template:Date range/doc
+Template:Delete/doc
+Template:DexDropdown
+Template:DexDropdown/doc
+Template:Dialogue
+Template:Disambig/doc
+Template:DisambigMsg/doc
+Template:Discount
+Template:Distinguish/doc
+Template:Doc
+Template:Doc/end
+Template:Doc/start
+Template:Draft ambox
+Template:Dropdown
+Template:Editlink
+Template:Editlink/doc
+Template:Emojis
+Template:Emojis/doc
+Template:Endflatlist
+Template:Epic Crossover Skin Infobox
+Template:Epic Skin
+Template:Epic Skin/doc
+Template:Epic skin infobox
+Template:EventIcon
+Template:EventYearList
+Template:EventYearList/doc
+Template:Extension DPL
+Template:FFDEC
+Template:FP link
+Template:FP link/doc
+Template:Flatlist
+Template:Frames
+Template:Frames/doc
+Template:FreeRewardsItem
+Template:Fullurl
+Template:Fullurl/doc
+Template:Gamemodes
+Template:Gamemodes/doc
+Template:Gamename
+Template:Gamename/doc
+Template:Gamepedia recent changes block
+Template:Gamepedia rss block
+Template:Gamepedia youtube block
+Template:Ghost
+Template:Hatnote
+Template:Hatnote/doc
+Template:Head
+Template:Head/doc
+Template:Holiday Image
+Template:Holiday Image/doc
+Template:Infobox
+Template:Infobox/doc
+Template:ItemTag
+Template:ItemTag/doc
+Template:Itembox/bottom
+Template:Itembox/top
+Template:LegendLevelingRow
+Template:LegendPrevNext
+Template:LegendStance
+Template:LegendStance/doc
+Template:LegendStanceStat
+Template:LegendStanceStat/doc
+Template:LegendStancesRow
+Template:LegendStancesRow/doc
+Template:LegendStancesRowByName
+Template:LegendWeaponPair
+Template:Legend infobox/doc
+Template:Legend infobox test
+Template:Legend profile
+Template:Legend tile
+Template:Legend tile/doc
+Template:Level 50 Title
+Template:Level 50 Title/doc
+Template:License
+Template:License/BMG
+Template:License/CC-BY
+Template:License/CC-BY-SA
+Template:License/CC-PD
+Template:License/fairuse
+Template:License/nolicense
+Template:Link list
+Template:Link list/doc
+Template:List of Weapons
+Template:Loadout table
+Template:Loadout table/bottom
+Template:Loadout table/top
+Template:Main
+Template:Main/doc
+Template:MapListing
+Template:MapListing/bottom
+Template:MapListing/doc
+Template:MapListing/top
+Template:Merch info
+Template:Merch info/doc
+Template:Merge
+Template:Merge/doc
+Template:Month
+Template:Month/doc
+Template:Move
+Template:Move/doc
+Template:Mythic Crossover Skin Infobox
+Template:Mythic Skin
+Template:Mythic Skin Infobox
+Template:Navbar
+Template:Navbox subgroup
+Template:Ni
+Template:Ni/doc
+Template:Nimg
+Template:Nimg/doc
+Template:Outdated
+Template:Overbrace
+Template:Overbrace/doc
+Template:Overbrace/end
+Template:Patch
+Template:Patch/doc
+Template:Pro player infobox
+Template:Publisher
+Template:Publisher/doc
+Template:QuestList
+Template:QuestList/Alpha
+Template:QuestList/Asgardian
+Template:QuestList/BCX1v1Winners
+Template:QuestList/BCX2024 1v1Top8
+Template:QuestList/BCX2024 2v2Top4
+Template:QuestList/BCX2v2Winners
+Template:QuestList/Batavia
+Template:QuestList/BookClub
+Template:QuestList/BotPun
+Template:QuestList/BrynnChoice
+Template:QuestList/CantRead
+Template:QuestList/ChangeForm
+Template:QuestList/EuroPop
+Template:QuestList/ExaltedLion
+Template:QuestList/Fangwild
+Template:QuestList/Hats
+Template:QuestList/HighDefense
+Template:QuestList/HighDexterity
+Template:QuestList/HighSpeed
+Template:QuestList/HighStrength
+Template:QuestList/LinFeiTrained
+Template:QuestList/LowDefense
+Template:QuestList/LowDexterity
+Template:QuestList/LowSpeed
+Template:QuestList/LowStrength
+Template:QuestList/MagicUser
+Template:QuestList/MidDefense
+Template:QuestList/MidDexterity
+Template:QuestList/MidSpeed
+Template:QuestList/MidStrength
+Template:QuestList/OuterSpace
+Template:QuestList/PartHuman
+Template:QuestList/PetOwner
+Template:QuestList/SemiHuman
+Template:QuestList/Thera
+Template:QuestList/doc
+Template:Quote
+Template:Quote/doc
+Template:Realm Infobox
+Template:Region
+Template:Removed
+Template:Reupload
+Template:Reupload/doc
+Template:Rewards
+Template:Rewards/doc
+Template:See
+Template:See/doc
+Template:Skin Set Infobox/doc
+Template:Skin page
+Template:Skirmish infobox
+Template:Small
+Template:Space
+Template:Space/doc
+Template:StanceLongName
+Template:Stances
+Template:Stances/top
+Template:Standard weapon name
+Template:Stat
+Template:Stub/doc
+Template:Subpage
+Template:Subpage/doc
+Template:TD
+Template:TD/doc
+Template:Tag
+Template:Taunt infobox
+Template:TestTemplate
+Template:Title
+Template:Tl
+Template:Tl/doc
+Template:Tlx
+Template:Tlx/doc
+Template:Tocright
+Template:Tocright/doc
+Template:Trackbox
+Template:Trackbox/doc
+Template:Transclude
+Template:Trim
+Template:Trim/doc
+Template:Undocumented
+Template:Unused
+Template:Update history
+Template:Update history/doc
+Template:Uploadlink
+Template:Uploadlink/doc
+Template:User
+Template:User/doc
+Template:VSR
+Template:VSR/doc
+Template:VSRBox
+Template:VSRBox/bottom
+Template:VSRBox/doc
+Template:VSRBox/top
+Template:WeaponPairLegend
+Template:Weapon icon
+Template:Weapon icon/doc
+Template:Weapon infobox
+Template:Weapons table
+Template:Weapons table/Row
+Template:Weapons table/Row/Cell
+Template:Weplink
+Template:Weplink/doc
+Template:Wiki admin
+Template:Wiki admin/doc

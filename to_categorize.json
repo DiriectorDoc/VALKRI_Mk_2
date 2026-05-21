@@ -1,0 +1,24 @@
+{
+	"add": {
+		"Categhory:Sidekick images": [
+			{
+				"ns": 6,
+				"category": "Bot images"
+			}
+		]
+	},
+	"remove": {
+		"Categhory:Bot images": [
+			{
+				"ns": 6,
+				"category": "Bot images"
+			}
+		]
+	},
+	"fix": {
+		
+	},
+	"empty": [
+		
+	]
+}

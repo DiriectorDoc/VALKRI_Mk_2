@@ -6,10 +6,6 @@ let { colours, weapons, legends } = require("./patterns.json");
 const os = require("os");
 const path = require("path");
 
-// const getMP3Duration = require('get-mp3-duration');
-
-// const uiImages = require("./uiImages.json");
-
 readline.emitKeypressEvents(process.stdin);
 
 if (process.stdin.isTTY)

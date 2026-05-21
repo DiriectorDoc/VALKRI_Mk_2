@@ -3,11 +3,8 @@ const credentials = require("./password.json"/* Local file */);
 const fs = require("node:fs");
 const readline = require("readline");
 let { colours, weapons, legends } = require("./patterns.json");
-const { fetchUncategorized } = require("./fetch_uncategorized.js")
-
-// const getMP3Duration = require('get-mp3-duration');
-
-// const uiImages = require("./uiImages.json");
+const { fetchMembers } = require("./fetch_members.js");
+const { fetchUncategorized } = require("./fetch_uncategorized.js");
 
 readline.emitKeypressEvents(process.stdin);
 
@@ -40,6 +37,8 @@ function sortAndJoin(aset){
 function sleep(ms) {
 	return new Promise(resolve => setTimeout(resolve, ms, "sleep"));
 }
+
+const justFileName = (name) => name.replace(/^File:(.+)\.\w{3,4}$/, "$1");
 
 void async function(){
 	console.log("Logging in")
@@ -77,6 +76,10 @@ void async function(){
 	});
 	console.log("Emergency Shutoff activated")
 
+	console.log("Fetching Skin names")
+	let skins = await fetchMembers("Skins"),
+		weaponSkins = await fetchMembers("Weapon_skins");
+
 	let pagesList = [];
 	try {
 		pagesList = await fetchUncategorized()
@@ -96,14 +99,44 @@ void async function(){
 					content = content === "" ? "== Licensing ==\n{{License/BMG}}" : `${content.trim()}\n\n== Licensing ==\n{{License/BMG}}`
 				}
 				let filename = page.replace(/^File:/, "");
+				if(filename.includes(" Classic Colors.png") || /\d+x\d+\.png$/i.test(filename)){
+					content = `{{delete|duplicate}}\n${content}`
+				}
 				for(let c of colours){
 					if(filename.includes(` ${c}.png`)){
 						cats.add(`[[Category:${c} images]]`)
 						break
 					}
 				}
+				if(skins.includes(justFileName(page))){
+					cats.add("[[Category:Skin images]]")
+				}
+				if(weaponSkins.includes(justFileName(page))){
+					cats.add("[[Category:Weapon skin images]]")
+				}
+				if(/^Bot[_\s]/.test(filename)){
+					cats.add("[[Category:Sidekick images]]")
+				}
+				if(/^Avatar[_\s]/.test(filename)){
+					cats.add("[[Category:Avatar images]]")
+				}
+				if(/^AniAvatar[_\s]/.test(filename)){
+					cats.add("[[Category:Animated avatar images]]")
+				}
+				if(/^Emoji[_\s]/.test(filename)){
+					cats.add("[[Category:Emoji images]]")
+				}
+				if(/^Map[_\s]/.test(filename)){
+					cats.add("[[Category:Map images]]")
+				}
+				if(/^Podium[_\s]/.test(filename)){
+					cats.add("[[Category:Podium images]]")
+				}
 				if(/^Patch\d+[_\s]/i.test(filename)){
 					cats.add("[[Category:Patch images]]")
+				}
+				if(/^Bundle[_\s]/i.test(filename)){
+					cats.add("[[Category:Bundle images]]")
 				}
 				if(/^SplashArt[_\s]/i.test(filename)){
 					cats.add("[[Category:Event splash art]]")
@@ -118,7 +151,7 @@ void async function(){
 				return content !== rev.content.trim() && ({
 					// return parameters needed for [[mw:API:Edit]]
 					text: content,
-					summary: "Categorized",
+					summary: cats.size ? `Categorized into ${[...cats].sort().join(", ")}` : "Added license info",
 					minor: true
 				})
 			}).then(() => done.push(page)).catch(err => console.log(err)), sleep(4500)]).then(e => sleep(e == "sleep" ? 10000 : 3750))

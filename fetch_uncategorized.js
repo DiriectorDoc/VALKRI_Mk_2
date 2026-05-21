@@ -12,7 +12,7 @@ export async function fetchUncategorized() {
 				extention += `&${k}=${encodeURIComponent(v)}`
 			}
 			console.log(`Fetching batch of pages starting at ${cont?.qpoffset ?? 0}`)
-			let result = await fetch(`https://brawlhalla.wiki.gg/api.php?action=query&format=json&list=querypage&formatversion=2&qppage=Uncategorizedimages&qplimit=5000${extention}`)
+			let result = await fetch(`https://brawlhalla.wiki.gg/api.php?action=query&format=json&list=querypage&formatversion=2&qppage=Uncategorizedimages&qplimit=5000${extention}&origin=*`)
 			if(result.status == 429 || result.status == 502){
 				console.log("Retrying in 5")
 				await sleep(5e3)
@@ -22,7 +22,7 @@ export async function fetchUncategorized() {
 			cont = result.continue;
 			if(result.query?.querypage?.results){
 				pagesList = pagesList.union(new Set(result.query.querypage.results.map(e => e.title)))
-				return sleep(1000)
+				return sleep(2500)
 			}
 		}()
 	} while(cont)
