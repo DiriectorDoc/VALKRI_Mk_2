@@ -158,7 +158,7 @@ void async function(){
 		dirs,
 		(location, _idx) => {
 			let page = path.basename(location);
-			return Promise.race([/\.mediawiki$/i.test(page) ? bot.create(path.basename(location, ".mediawiki"), fs.readFileSync(location).toString(), "Created page") : bot.upload(location, page, `File uploaded programmatically by VALKRI MK 2
+			return Promise.race([/\.mediawiki$/i.test(page) ? bot.create(path.basename(location, ".mediawiki"), fs.readFileSync(location).toString(), "Created page") : bot.upload(location, page, `File uploaded programmatically by [[User:VALKRI Mk 2]]
 
 == Licensing ==
 {{License/BMG}}${(() => {

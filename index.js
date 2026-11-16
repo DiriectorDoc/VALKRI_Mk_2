@@ -82,6 +82,7 @@ void async function(){
 
 	let pagesList = [];
 	try {
+		console.log("Fetching uncategorized")
 		pagesList = await fetchUncategorized()
 	} catch(err){
 		console.error(err)
@@ -96,7 +97,7 @@ void async function(){
 				let content = rev.content.trim(),
 					cats = new Set;
 				if(!(/==\s*licensing\s*==/i.test(content))){
-					content = content === "" ? "== Licensing ==\n{{License/BMG}}" : `${content.trim()}\n\n== Licensing ==\n{{License/BMG}}`
+					content = content === "" ? "== Licensing ==\n{{License/BMG}}" : `${content}\n\n== Licensing ==\n{{License/BMG}}`
 				}
 				let filename = page.replace(/^File:/, "");
 				if(filename.includes(" Classic Colors.png") || /\d+x\d+\.png$/i.test(filename)){
@@ -116,6 +117,9 @@ void async function(){
 				}
 				if(/^Bot[_\s]/.test(filename)){
 					cats.add("[[Category:Sidekick images]]")
+				}
+				if(/^SkinIcon[_\s]/.test(filename)){
+					cats.add("[[Category:Skin icons]]")
 				}
 				if(/^Avatar[_\s]/.test(filename)){
 					cats.add("[[Category:Avatar images]]")
@@ -147,7 +151,8 @@ void async function(){
 				if(/^\w+weapon\.png$/i.test(filename)){
 					cats.add("[[Category:Weapon drop images]]")
 				}
-				content = cats.size ? `${content.trim()}\n\n${[...cats].join("\n")}` : content.trim();
+				if(cats.size)
+					content = `${content}\n\n${[...cats].join("\n")}`;
 				return content !== rev.content.trim() && ({
 					// return parameters needed for [[mw:API:Edit]]
 					text: content,
